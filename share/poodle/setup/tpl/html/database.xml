@@ -1,0 +1,6 @@
+<span tal:condition="not:FATAL_ERROR" i18n:translate="">Database configuration complete!</span>
+
+<div id="stepbuttons">
+	<a tal:condition="FATAL_ERROR" class="button" href="?step=4&amp;retry" i18n:translate="">Retry</a>
+	<a tal:condition="not:FATAL_ERROR" href="?step=5" class="button" tal:attributes="href uri_next" i18n:translate="">Next</a>
+</div>

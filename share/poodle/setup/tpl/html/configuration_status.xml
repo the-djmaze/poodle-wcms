@@ -1,0 +1,23 @@
+<fieldset><legend i18n:translate="">Configuration status</legend>
+<table><tbody>
+<tr class="ok">
+	<td i18n:translate="">Database connection</td>
+	<td class="status">OK</td>
+</tr>
+<tr tal:attributes="class php:${SAVE_CFG_ERROR}?'fail':'ok'">
+	<td i18n:translate="">Save configuration file</td>
+	<td tal:condition="SAVE_CFG_ERROR" class="status" i18n:translate="">failed</td>
+	<td tal:condition="not:SAVE_CFG_ERROR" class="status">OK</td>
+</tr>
+</tbody></table>
+</fieldset>
+
+<div tal:condition="SAVE_CFG_ERROR">
+	<span tal:content="SAVE_CFG_ERROR">Download and upload the configuration file</span>
+	<p id="download"><a href="?step=3&amp;download" tal:attributes="href string:${REQUEST_URI}&amp;download" i18n:translate="">Download config.php file</a></p>
+</div>
+<div tal:condition="not:SAVE_CFG_ERROR" i18n:translate="">Configuration complete!</div>
+
+<div id="stepbuttons">
+	<a href="?step=4" class="button" tal:attributes="href uri_next" i18n:translate="">Next</a>
+</div>

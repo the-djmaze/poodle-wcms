@@ -1,0 +1,10 @@
+#form-fields .values div div {
+	display:inline-block;
+	visibility:hidden;
+}
+#form-fields .values div div a {
+	display:none;
+}
+#form-mailto .add input {
+	visibility:hidden;
+}

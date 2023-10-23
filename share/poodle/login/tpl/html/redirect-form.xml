@@ -1,0 +1,25 @@
+
+<form id="auth-redirect-form" tal:attributes="action auth_result/action" method="post">
+<div tal:repeat="field auth_result/fields" tal:omit-tag="'hidden'==${field/type}">
+	<label tal:condition="php:!${auth_result/submit} and ${field/label}" tal:content="field/label">field/label</label>
+	<input tal:attributes="type field/type; name field/name; value field/value"/>
+<!--
+	<input tal:attributes="type field/type; name field/name; value field/value
+		readonly    field/attributes/readonly;
+		disabled    field/attributes/disabled;
+		maxlength   field/attributes/maxlength;
+		min         field/attributes/min;
+		max         field/attributes/max;
+		multiple    field/attributes/multiple;
+		pattern     field/attributes/pattern;
+		placeholder field/attributes/placeholder;
+		required    field/attributes/required;
+		step        field/attributes/step;
+	"/>
+-->
+</div>
+<div>
+	<input type="hidden" name="provider" tal:attributes="value auth_provider/id"/>
+	<button type="submit"><span tal:omit-tag="" i18n:translate="">Continue</span>: <span tal:replace="auth_provider/name"></span></button>
+</div></form>
+<script tal:condition="auth_result/submit">document.getElementById('auth-redirect-form').submit()</script>

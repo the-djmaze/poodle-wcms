@@ -1,0 +1,89 @@
+@import "mimetypes";
+
+#admin-resources th.date { width:120px; }
+#admin-resources th.type { width:200px; }
+
+#admin-resources .tree > li:first-child {
+	background:#fff;
+	padding-left:0;
+}
+#admin-resources .tree > li:first-child > a {
+	background:url(../images/16x16/home.png) no-repeat 0 3px;
+}
+.tree li.error {
+	background-color:inherit;
+	border:0;
+	color:inherit;
+}
+
+.tree li.email > a:first-child {
+	background: url('../images/16x16/mail-read.png') no-repeat 0 center;
+}
+.tree li.form > a:first-child {
+	background: url('../images/16x16/view-form.png') no-repeat 0 center;
+}
+.tree li.search > a:first-child {
+	background: url('../images/16x16/search.png') no-repeat 0 center;
+}
+.tree li.layout > a:first-child {
+	background: url('../images/16x16/layout.png') no-repeat 0 center;
+}
+
+#acl_groups th + th,
+#acl_groups td + td { text-align:center }
+#acl_groups .child { padding-left:20px }
+#acl_groups label { clear:none; width:auto }
+#acl_groups .disabled td:first-child .input-checkbox,
+#acl_groups .disabled td:first-child .input-radio { opacity:1; }
+
+#admin-resource #resource_uri { text-transform:lowercase; }
+
+#admin-resource #resource-actions { padding-top:8px; }
+#admin-resource #resource-actions > * { float:right; }
+
+#admin-resource > * { display:none; }
+
+#admin-resource td .selectbox select { min-width:70px; }
+
+#admin-resource #resource-advanced {
+	background-color:#EEE;
+	padding:1em 0 1em 20px
+}
+#admin-resource #resource-advanced > a {
+	cursor:pointer;
+	display:block;
+}
+#admin-resource #resource-advanced > div {
+	display:none;
+}
+#admin-resource #resource-advanced.expanded > div {
+	display:block;
+}
+#admin-resource #resource-advanced > a::before { content:'▾ '; }
+#admin-resource #resource-advanced.expanded > a::before { content:'▴ '; }
+
+#leftside .tree .details {
+	display:none;
+}
+
+@media screen and (min-width: 800px) {
+	#resource-advanced-data,
+	#type-fields-general,
+	#type-fields-content {
+		columns: 360px auto;
+	}
+}
+
+#resource-advanced-data label {
+	display: inline-block;
+	min-width: 350px;
+}
+
+#resource-advanced-data label,
+#type-fields-general label,
+#type-fields-content label {
+	-webkit-column-break-inside: avoid;
+	break-inside:avoid-column; /* W3C */
+	/* workaround, https://bugzilla.mozilla.org/show_bug.cgi?id=549114 */
+	display:table; /* Gecko */
+}

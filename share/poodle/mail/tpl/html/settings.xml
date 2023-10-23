@@ -1,0 +1,117 @@
+
+<form action="" method="post">
+<ul class="tabs">
+<!--
+<li>
+	<a i18n:translate="">Incoming</a>
+	<div>
+		<fieldset tal:repeat="item mailreaders">
+			<legend>
+				<input id="mailserver_ID_title" type="radio" name="mailserver_default[i]" value="0" tal:attributes="value item/id; checked item/is_default; id 'mailserver_${item/id}_title'"/>
+				<label for="mailserver_{mailreader/id}_title">{mailreader/title}</label>
+			</legend>
+			<label for="mailserver_{mailreader/id}_type" i18n:translate="">Type</label>
+			<select id="mailserver_{mailreader/id}_type" name="mailserver[{mailreader/id}][type]" onchange="change_mail_handler(this)">
+				<option tal:repeat="type mail_read_handlers" tal:attributes="value type/value; selected php:${type/value}==${item/type}" tal:content="type/value">imap</option>
+			</select>
+			<label for="mailserver_{mailreader/id}_address" i18n:translate="">Email address</label>
+			<input type="text" id="mailserver_{mailreader/id}_address" name="mailserver[{mailreader/id}][address]" value="{mailreader/email_address}"/>
+			<label for="mailserver_{mailreader/id}_host" i18n:translate="">Host</label>
+			<input type="text" id="mailserver_{mailreader/id}_host" name="mailserver[{mailreader/id}][host]" value="{mailreader/host}"/>
+			<label for="mailserver_{mailreader/id}_user" i18n:translate="">Username</label>
+			<input type="text" id="mailserver_{mailreader/id}_user" name="mailserver[{mailreader/id}][user]" value="{mailreader/user}"/>
+			<label for="mailserver_{mailreader/id}_pass" i18n:translate="">Passphrase</label>
+			<input type="text" id="mailserver_{mailreader/id}_pass" name="mailserver[{mailreader/id}][pass]" value="{mailreader/pass}"/>
+		</fieldset>
+	</div>
+</li>
+-->
+<li>
+	<a i18n:translate="">Outgoing</a>
+	<div>
+		<label>
+			<span i18n:translate="">Encoding</span>
+			<select name="mail[encoding]">
+				<option value="8bit">8bit</option>
+				<optgroup label="7bit fail-safe (overhead)">
+					<option value="base64" tal:attributes="selected php:'base64'==${CONFIG/mail/encoding}">base64 (33%)</option>
+					<option value="quoted-printable" tal:attributes="selected php:'quoted-printable'==${CONFIG/mail/encoding}">quoted-printable (14%-200%)</option>
+				</optgroup>
+			</select>
+		</label>
+
+		<label>
+			<span i18n:translate="">Default sender email address</span>
+			<input type="email" name="mail[from]" tal:attributes="value CONFIG/mail/from" required=""/>
+		</label>
+
+		<label>
+			<span i18n:translate="">Default bounce email address</span>
+			<input type="email" name="mail[return_path]" tal:attributes="value CONFIG/mail/return_path"/>
+			<em class="infobox"><span i18n:translate="">Email_bounce_info</span></em>
+		</label>
+
+		<table style="width:100%"><thead>
+			<tr>
+				<th style="width:4em">default</th>
+				<th>type</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr tal:repeat="sender mail_senders">
+				<td style="vertical-align:top"><input name="mail[sender]" type="radio" tal:attributes="value sender/name; checked php:${sender/name}==${CONFIG/mail/sender}"/></td>
+				<td>
+					<span tal:condition="not:sender/config" tal:content="sender/name">sender/name</span>
+					<details tal:condition="sender/config">
+						<summary tal:content="sender/name">sender/name</summary>
+						<div>
+							<label tal:repeat="sc sender/config">
+								<div tal:omit-tag="" tal:condition="php:'checkbox'===${sc/type}">
+									<input tal:attributes="checked sc/checked; name 'sender[${sender/name}][${sc/name}]'" type="checkbox"/>
+									<span tal:content="sc/label" i18n:translate="">label</span>
+								</div>
+								<div tal:omit-tag="" tal:condition-else="">
+									<span tal:content="sc/label" i18n:translate="">Encoding</span>
+									<select tal:condition="php:'select'===${sc/type}" tal:attributes="name 'sender[${sender/name}][${sc/name}]'">
+										<option tal:repeat="opt sc/options" tal:attributes="value opt/value; selected opt/selected" tal:content="opt/label">opt/label</option>
+									</select>
+									<input tal:condition-else="" tal:attributes="type sc/type; name 'sender[${sender/name}][${sc/name}]'; value sc/value"/>
+								</div>
+							</label>
+						</div>
+					</details>
+				</td>
+			</tr>
+		</tbody>
+		</table>
+
+		<fieldset>
+			<legend i18n:translate="">Test</legend>
+			<input type="text" name="from_name" i18n:attributes="placeholder 'from'" tal:attributes="value CONFIG/site/name"/><br/>
+			<input type="email" name="from_address" i18n:attributes="placeholder 'from email address'" tal:attributes="value CONFIG/mail/from"/><br/>
+			<input type="text" name="to_name" i18n:attributes="placeholder 'recipient name'" tal:attributes="value IDENTITY/nickname"/><br/>
+			<input type="email" name="to_address" i18n:attributes="placeholder 'recipient email address'" tal:attributes="value IDENTITY/email"/><br/>
+			<textarea name="message_body" placeholder="message"></textarea><br/>
+			<button name="test" i18n:translate="">Send message</button>
+		</fieldset>
+
+		<details>
+			<summary>SPF</summary>
+			<pre tal:content="spf"></pre>
+		</details>
+		<details>
+			<summary>DKIM</summary>
+			<pre tal:content="dkim"></pre>
+		</details>
+		<details>
+			<summary>DMARC</summary>
+			<pre tal:content="dmarc"></pre>
+		</details>
+
+	</div>
+</li>
+</ul>
+<div class="clear" style="text-align:right">
+	<button i18n:translate="">Save</button>
+</div>
+</form>

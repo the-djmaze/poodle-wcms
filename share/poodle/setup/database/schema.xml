@@ -1,0 +1,857 @@
+<?xml version="1.0"?>
+<database version="1.0" name="poodle" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<!-- NOTE: MySQL InnoDB max key length is 767 bytes,
+		with varchar utf8mb4 means max 191 bytes
+		including an INT means 191 - 4 = VARCHAR(187)
+	-->
+
+	<table name="acl_actions">
+		<col name="acl_a_id" type="SERIAL"/>
+		<col name="acl_a_name" type="VARCHAR" length="50" binary="true"/>
+		<key name="PRIMARY" type="PRIMARY">
+			<col name="acl_a_id"/>
+		</key>
+		<key name="i_acl_a_name" type="UNIQUE">
+			<col name="acl_a_name"/>
+		</key>
+	</table>
+
+	<table name="acl_groups">
+		<col name="group_id" type="INT"/>
+		<col name="acl_path" type="VARCHAR" length="255" binary="true"/>
+		<col name="acl_a_ids" type="VARCHAR" length="255" binary="true" comment="Comma seperated list of acl_actions.acl_a_id's"/>
+		<key name="PRIMARY" type="PRIMARY">
+			<col name="group_id"/>
+			<col name="acl_path" length="190"/>
+		</key>
+	</table>
+
+	<table name="auth_attempts">
+		<col name="auth_provider_id" type="INT"/>
+		<col name="auth_attempt_ip" type="VARCHAR" length="46" binary="true"/>
+		<col name="auth_attempt_action" type="VARCHAR" length="16" binary="true"/>
+		<col name="auth_attempt_count" type="TINYINT" default="1"/>
+		<col name="auth_attempt_last_time" type="INT"/>
+		<key name="PRIMARY" type="PRIMARY">
+			<col name="auth_provider_id"/>
+			<col name="auth_attempt_ip"/>
+			<col name="auth_attempt_action"/>
+		</key>
+		<key name="i_auth_attempt_last_time">
+			<col name="auth_attempt_last_time"/>
+		</key>
+	</table>
+
+	<table name="auth_identities">
+		<col name="identity_id" type="INT"/>
+		<col name="auth_provider_id" type="INT" default="1"/>
+		<col name="auth_claimed_id" type="VARCHAR" length="184" binary="true" comment="Name or OpenID ClaimedID"/>
+		<col name="auth_password" type="VARCHAR" length="255" binary="true" nullable="true" comment="hash_algo:value"/>
+		<col name="auth_claimed_id_info" type="VARCHAR" length="255" binary="true" nullable="true"/>
+		<key name="PRIMARY" type="PRIMARY">
+			<col name="auth_provider_id"/>
+			<col name="auth_claimed_id"/>
+		</key>
+		<key name="i_auth_claimed_id" type="UNIQUE">
+			<col name="auth_claimed_id"/>
+		</key>
+<!--
+		<key name="i_auth_provider_identity" type="UNIQUE">
+			<col name="identity_id"/>
+			<col name="auth_provider_id"/>
+		</key>
+-->
+	</table>
+
+	<table name="auth_providers">
+		<col name="auth_provider_id" type="SERIAL"/>
+		<col name="auth_provider_class" type="VARCHAR" length="64" binary="true"/>
+		<col name="auth_provider_is_2fa" type="TINYINT" comment="0=no, 1=yes"/>
+		<col name="auth_provider_mode" type="TINYINT" comment="bitwise:0=disabled, 1=public, 2=admin"/>
+		<col name="auth_provider_name" type="VARCHAR" length="32" binary="true"/>
+		<key name="PRIMARY" type="PRIMARY">
+			<col name="auth_provider_id"/>
+		</key>
+		<key name="i_auth_provider_2fa_mode">
+			<col name="auth_provider_mode"/>
+			<col name="auth_provider_is_2fa"/>
+		</key>
+		<key name="i_auth_provider_class" type="UNIQUE">
+			<col name="auth_provider_class"/>
+		</key>
+	</table>
+
+	<table name="auth_providers_assoc">
+		<col name="server_url" type="TEXT" binary="true"/>
+		<col name="assoc_handle" type="VARCHAR" length="255" binary="true"/>
+		<col name="assoc_type" type="VARCHAR" length="16" binary="true"/>
+		<col name="apa_secret" type="TEXT" binary="true" comment="base64 encoded mac_key"/>
+		<col name="apa_etime" type="INT" comment="time() + expires_in"/>
+		<key name="PRIMARY" type="PRIMARY">
+			<col name="server_url" length="191"/>
+		</key>
+	</table>
+
+	<table name="auth_providers_detect">
+		<col name="auth_provider_id" type="INT"/>
+		<col name="auth_detect_name" type="VARCHAR" length="32" binary="true"/>
+		<col name="auth_detect_regex" type="VARCHAR" length="255" binary="true"/>
+		<col name="auth_detect_discover_uri" type="TEXT" binary="true"/>
+		<key name="PRIMARY" type="PRIMARY">
+			<col name="auth_detect_name"/>
+		</key>
+	</table>
+
+	<table name="auth_providers_endpoints">
+		<col name="endpoint_id" type="SERIAL"/>
+		<col name="server_url" type="TEXT" binary="true"/>
+		<col name="used_yadis" type="TINYINT"/>
+		<col name="type_uris" type="TEXT" binary="true"/>
+		<key name="PRIMARY" type="PRIMARY">
+			<col name="endpoint_id"/>
+		</key>
+		<key name="i_ap_server_url" type="UNIQUE">
+			<col name="server_url" length="190"/>
+		</key>
+	</table>
+
+	<table name="auth_providers_nonce">
+		<col name="endpoint_id" type="INT"/>
+		<col name="nonce_etime" type="INT"/>
+		<col name="nonce_salt" type="VARCHAR" length="184" binary="true"/>
+		<key name="PRIMARY" type="PRIMARY">
+			<col name="endpoint_id"/>
+			<col name="nonce_etime"/>
+			<col name="nonce_salt"/>
+		</key>
+	</table>
+
+	<table name="classes_events">
+		<col name="class_name" type="VARCHAR" binary="true" length="64"/>
+		<col name="class_event" type="VARCHAR" binary="true" length="32"/>
+		<col name="class_callable" type="VARCHAR" binary="true" length="64"/>
+		<key name="PRIMARY" type="PRIMARY">
+			<col name="class_name"/>
+			<col name="class_event"/>
+			<col name="class_callable"/>
+		</key>
+	</table>
+
+	<table name="config">
+		<col name="cfg_section" type="VARCHAR" length="20" binary="true"/>
+		<col name="cfg_key" type="VARCHAR" length="50" binary="true"/>
+		<col name="cfg_value" type="TEXT" binary="true" nullable="true"/>
+		<col name="cfg_data_type" type="TINYINT" default="0"/>
+<!--	<col name="cfg_field_type" type="TINYINT" default="0" oldname="cfg_data_type" comment="see \Poodle\FieldTypes::FIELD_TYPE_*"/>-->
+		<key name="PRIMARY" type="PRIMARY">
+			<col name="cfg_section"/>
+			<col name="cfg_key"/>
+		</key>
+	</table>
+
+	<table name="countries">
+		<col name="country_code" type="SMALLINT"/>
+		<col name="country_iso2" type="CHAR" length="2" binary="true"/>
+		<col name="country_iso3" type="CHAR" length="3" binary="true"/>
+		<col name="country_name" type="VARCHAR" length="80" binary="true"/>
+		<col name="country_geonameid" type="INT" default="0" comment="http://geonames.org/"/>
+		<col name="country_phonecode" type="INT" default="0"/>
+		<key name="PRIMARY" type="PRIMARY">
+			<col name="country_code"/>
+		</key>
+		<key name="i_countries_iso2" type="UNIQUE">
+			<col name="country_iso2"/>
+		</key>
+		<key name="i_countries_iso3" type="UNIQUE">
+			<col name="country_iso3"/>
+		</key>
+<!--		<key name="i_countries_geonameid" type="UNIQUE">
+			<col name="country_geonameid"/>
+		</key>-->
+	</table>
+
+	<table name="crontab">
+		<col name="cron_id" type="SERIAL"/>
+		<col name="cron_expression" type="VARCHAR" length="255" binary="true" oldname="cron_interval" comment="Linux format"/>
+		<col name="cron_call" type="VARCHAR" length="255" binary="true"/>
+		<col name="cron_last_run" type="INT"/>
+		<col name="cron_active" type="TINYINT" default="1"/>
+		<col name="cron_mail_error" type="TEXT" binary="true" nullable="true"/>
+		<col name="cron_mail_success" type="TEXT" binary="true" nullable="true"/>
+		<key name="PRIMARY" type="PRIMARY">
+			<col name="cron_id"/>
+		</key>
+		<key name="i_crontab_call" type="UNIQUE">
+			<col name="cron_call" length="191"/>
+		</key>
+	</table>
+
+	<table name="crontab_logs">
+		<col name="cron_id" type="INT"/>
+		<col name="cron_time" type="INT"/>
+		<col name="cron_error" type="TEXT" binary="true" nullable="true"/>
+	</table>
+
+	<table name="currencies">
+		<col name="currency_id" type="SMALLINT" comment="ISO 4217 number"/>
+		<col name="currency_code" type="CHAR" length="3" binary="true" comment="ISO 4217 code"/>
+		<col name="currency_decimals" type="TINYINT" comment="min=0, max=3"/>
+		<col name="currency_symbol" type="VARCHAR" length="3" binary="true"/>
+		<col name="currency_name" type="VARCHAR" length="128" binary="true"/>
+		<key name="PRIMARY" type="PRIMARY">
+			<col name="currency_id"/>
+		</key>
+	</table>
+
+	<table name="email_addresses">
+		<col name="email_address_id" type="SERIAL"/>
+		<col name="email_address_value" type="VARCHAR" length="254" binary="true"/>
+		<col name="email_address_status" type="TINYINT" default="1" comment="bitwise: -1=deleted, 0=invalid, 1=valid, 2=opt-out"/>
+		<key name="PRIMARY" type="PRIMARY">
+			<col name="email_address_id"/>
+		</key>
+		<key name="i_email_address_value" type="UNIQUE">
+			<col name="email_address_value" length="191"/>
+		</key>
+	</table>
+
+	<table name="email_addresses_rel">
+		<col name="ear_name" type="VARCHAR" length="64" binary="true"/>
+		<col name="ear_id" type="INT"/>
+		<col name="email_address_id" type="INT"/>
+		<col name="email_address_flags" type="TINYINT" default="0" comment="1=primary, 2=html, 4=reply-to"/>
+		<key name="PRIMARY" type="PRIMARY">
+			<col name="ear_name"/>
+			<col name="ear_id"/>
+			<col name="email_address_id"/>
+		</key>
+	</table>
+
+	<table name="forms">
+		<col name="form_id" type="SERIAL"/>
+		<col name="form_name" type="VARCHAR" length="128" binary="true"/>
+		<col name="form_active" type="TINYINT" default="1"/>
+		<col name="form_email" type="INT" nullable="true"/>
+		<col name="form_emailaddress" type="VARCHAR" length="255" binary="true" nullable="true"/>
+		<col name="form_store_db" type="VARCHAR" length="255" binary="true" nullable="true"/>
+		<col name="form_result_uri" type="VARCHAR" length="255" binary="true" nullable="true"/>
+		<col name="form_send_email_resource" type="INT" default="0"/>
+		<key name="PRIMARY" type="PRIMARY">
+			<col name="form_id"/>
+		</key>
+		<key name="iu_form_name" type="UNIQUE">
+			<col name="form_name"/>
+		</key>
+	</table>
+
+	<table name="forms_fields">
+		<col name="ffield_id" type="SERIAL"/>
+		<col name="form_id" type="INT"/>
+		<col name="ffield_sortorder" type="INT"/>
+		<col name="ffield_type" type="VARCHAR" length="255" binary="true"/>
+		<col name="ffield_label" type="VARCHAR" length="255" binary="true"/>
+		<col name="ffield_value" type="TEXT" binary="true"/>
+		<col name="ffield_required" type="TINYINT" default="0"/>
+		<col name="ffield_active" type="TINYINT" default="1"/>
+		<key name="PRIMARY" type="PRIMARY">
+			<col name="ffield_id"/>
+		</key>
+	</table>
+
+	<table name="forms_postdata">
+		<col name="fpost_id" type="SERIAL"/>
+		<col name="form_id" type="INT"/>
+		<col name="fpost_time" type="INT"/>
+		<col name="fpost_data" type="TEXT" binary="true"/>
+		<key name="PRIMARY" type="PRIMARY">
+			<col name="fpost_id"/>
+		</key>
+	</table>
+
+	<table name="groups">
+		<col name="group_id" type="SERIAL"/>
+		<col name="group_parent" type="INT"/>
+		<col name="group_type" type="TINYINT" default="1" comment="bitwise: 0=OPEN, 1=CLOSED, 2=HIDDEN, 4=USER, 8=PENDING"/>
+		<col name="group_name" type="VARCHAR" length="40" binary="true"/>
+		<col name="group_description" type="TEXT" binary="true"/>
+		<key name="PRIMARY" type="PRIMARY">
+			<col name="group_id"/>
+		</key>
+		<key name="i_group_name" type="UNIQUE">
+			<col name="group_name"/>
+		</key>
+		<key name="i_group_parent">
+			<col name="group_parent"/>
+		</key>
+	</table>
+
+	<table name="groups_users">
+		<col name="group_id" type="INT"/>
+		<col name="identity_id" type="INT"/>
+		<col name="identity_status" type="TINYINT" default="1" comment="0=pending, 1=member, 2=moderator, 3=owner"/>
+		<key name="PRIMARY" type="PRIMARY">
+			<col name="group_id"/>
+			<col name="identity_id"/>
+		</key>
+		<key name="i_groups_users_all">
+			<col name="group_id"/>
+			<col name="identity_id"/>
+			<col name="identity_status"/>
+		</key>
+		<key name="i_groups_users_gid">
+			<col name="group_id"/>
+		</key>
+		<key name="i_groups_users_status">
+			<col name="group_id"/>
+			<col name="identity_status"/>
+		</key>
+		<key name="i_groups_users_uid">
+			<col name="identity_id"/>
+		</key>
+	</table>
+
+	<table name="l10n" comment="Installed languages">
+		<col name="l10n_id" type="SERIAL"/>
+		<col name="l10n_bcp47" type="VARCHAR" length="17" binary="true" oldname="l10n_rfc1766"/>
+		<col name="l10n_active" type="TINYINT" default="0"/>
+		<col name="l10n_iso639_1" type="CHAR" length="2" binary="true"/>
+		<col name="l10n_iso639_2" type="CHAR" length="3" binary="true"/>
+		<key name="PRIMARY" type="PRIMARY">
+			<col name="l10n_id"/>
+		</key>
+		<key name="i_l10n_active">
+			<col name="l10n_active"/>
+		</key>
+		<key name="i_l10n_dir" type="UNIQUE">
+			<col name="l10n_bcp47"/>
+		</key>
+		<key name="i_l10n_dir_active">
+			<col name="l10n_bcp47"/>
+			<col name="l10n_active"/>
+		</key>
+	</table>
+
+	<table name="l10n_translate">
+		<col name="msg_id" type="VARCHAR" length="64" binary="true"/>
+		<col name="v_en" type="TEXT" binary="true" oldname="en"/>
+		<col name="v_nl" type="TEXT" binary="true" nullable="true" oldname="nl"/>
+<!--
+		<col name="de" type="TEXT" binary="true"/>
+		<col name="de" type="TEXT" binary="true"/>
+		<col name="fr" type="TEXT" binary="true"/>
+		<col name="it" type="TEXT" binary="true"/>
+		<col name="es" type="TEXT" binary="true"/>
+		<col name="fr_be" type="TEXT" binary="true"/>
+		<col name="nl_be" type="TEXT" binary="true"/>
+-->
+		<key name="PRIMARY" type="PRIMARY">
+			<col name="msg_id"/>
+		</key>
+	</table>
+
+	<table name="log">
+		<col name="log_id" type="SERIAL"/>
+		<col name="log_time" type="INT" default="0"/>
+		<col name="log_level" type="TINYINT" default="0"/>
+		<col name="log_type" type="VARCHAR" length="20" binary="true"/>
+		<col name="identity_id" type="INT" default="0"/>
+		<col name="log_ip" type="VARCHAR" length="46" binary="true" nullable="true"/>
+		<col name="log_request_uri" type="VARCHAR" length="255" binary="true"/>
+		<col name="log_msg" type="TEXT" binary="true"/>
+		<col name="log_request_method" type="VARCHAR" length="10" binary="true"/>
+		<col name="log_request_headers" type="TEXT" binary="true"/>
+		<key name="PRIMARY" type="PRIMARY">
+			<col name="log_id"/>
+		</key>
+		<key name="i_log_error">
+			<col name="log_type"/>
+			<col name="identity_id"/>
+			<col name="log_ip"/>
+			<col name="log_request_uri" length="120"/>
+		</key>
+		<key name="i_log_time">
+			<col name="log_time"/>
+		</key>
+		<key name="i_log_type">
+			<col name="log_type"/>
+		</key>
+		<key name="i_log_types">
+			<col name="log_type"/>
+			<col name="log_request_uri" length="120"/>
+		</key>
+	</table>
+
+	<table name="log_ua">
+		<col name="log_ua_name" type="VARCHAR" length="255" binary="true"/>
+		<col name="log_ua_time" type="INT"/>
+		<key name="PRIMARY" type="PRIMARY">
+			<col name="log_ua_name" length="191"/>
+		</key>
+	</table>
+
+	<table name="media">
+		<col name="media_id" type="SERIAL"/>
+		<col name="identity_id" type="INT"/>
+		<col name="media_file_hash" type="VARCHAR" length="40" binary="true"/>
+		<col name="media_file" type="TEXT" binary="true"/>
+		<col name="media_org_filename" type="TEXT" binary="true"/>
+		<key name="PRIMARY" type="PRIMARY">
+			<col name="media_id"/>
+		</key>
+		<key name="i_media_file_hash" type="UNIQUE">
+			<col name="media_file" length="191"/>
+		</key>
+	</table>
+
+	<table name="media_album_formats">
+		<col name="format_id" type="SERIAL"/>
+		<col name="format_label" type="VARCHAR" length="255" binary="true"/>
+		<col name="format_width" type="SMALLINT"/>
+		<col name="format_height" type="SMALLINT"/>
+		<col name="format_options" type="SMALLINT" comment="bitwise:0=crop, 1=thumbnailImage(x,y,true), 2=cropScaledImage()"/>
+		<col name="format_filename" type="VARCHAR" length="255" binary="true"/>
+		<key name="PRIMARY" type="PRIMARY">
+			<col name="format_id"/>
+		</key>
+		<key name="i_media_album_format_filename" type="UNIQUE">
+			<col name="format_filename" length="191"/>
+		</key>
+	</table>
+
+	<table name="media_details">
+		<col name="media_id" type="INT"/>
+		<col name="l10n_id" type="INT"/>
+		<col name="media_title" type="VARCHAR" length="100" binary="true" nullable="true"/>
+		<col name="media_description" type="TEXT" binary="true" nullable="true"/>
+		<key name="PRIMARY" type="PRIMARY">
+			<col name="media_id"/>
+			<col name="l10n_id"/>
+		</key>
+	</table>
+
+	<table name="media_imageformats">
+		<col name="mif_id" type="SERIAL"/>
+		<col name="mif_width" type="SMALLINT"/>
+		<col name="mif_height" type="SMALLINT"/>
+		<col name="mif_label" type="VARCHAR" length="128" binary="true"/>
+		<col name="mif_dir" type="VARCHAR" length="128" binary="true"/>
+		<key name="PRIMARY" type="PRIMARY">
+			<col name="mif_id"/>
+		</key>
+	</table>
+
+	<table name="media_types">
+		<col name="media_type_mime" type="VARCHAR" length="190" binary="true"/>
+		<col name="media_type_extension" type="VARCHAR" length="5" binary="true"/>
+		<col name="media_type_directory" type="VARCHAR" length="15" binary="true"/>
+		<col name="media_type_flags" type="TINYINT" default="0" comment="1 = allow upload"/>
+		<key name="PRIMARY" type="PRIMARY">
+			<col name="media_type_mime"/>
+		</key>
+	</table>
+
+	<table name="menus">
+		<col name="menu_id" type="SERIAL"/>
+		<col name="menu_name" type="VARCHAR" length="64" binary="true"/>
+		<col name="menu_cssclass" type="VARCHAR" length="50" binary="true" nullable="true"/>
+		<key name="PRIMARY" type="PRIMARY">
+			<col name="menu_id"/>
+		</key>
+		<key name="i_menu_name" type="UNIQUE">
+			<col name="menu_name"/>
+		</key>
+	</table>
+
+	<table name="menus_items">
+		<col name="menu_id" type="INT"/>
+		<col name="mitem_id" type="SERIAL"/>
+		<col name="mitem_parent_id" type="INT"/>
+		<col name="mitem_flags" type="SMALLINT" default="1" comment="1=enabled"/>
+		<col name="mitem_label" type="VARCHAR" length="50" binary="true"/>
+		<col name="mitem_uri" type="VARCHAR" length="255" binary="true" nullable="true"/>
+		<col name="mitem_cssclass" type="VARCHAR" length="50" binary="true" nullable="true"/>
+		<col name="mitem_image" type="VARCHAR" length="255" binary="true" nullable="true"/>
+		<col name="mitem_sortpath" type="VARCHAR" length="255" binary="true" nullable="true"/>
+		<key name="PRIMARY" type="PRIMARY">
+			<col name="mitem_id"/>
+		</key>
+		<key name="i_menu_flags">
+			<col name="menu_id"/>
+			<col name="mitem_flags"/>
+		</key>
+	</table>
+
+	<table name="resource_attachment_types">
+		<col name="resource_attachment_type_id" type="SERIAL"/>
+		<col name="resource_type_id" type="INT"/>
+		<col name="resource_attachment_type_name" type="VARCHAR" length="64" binary="true"/>
+		<col name="resource_attachment_type_label" type="VARCHAR" length="64" binary="true"/>
+		<col name="resource_attachment_type_callback" type="VARCHAR" length="128" binary="true" default="" comment="execute before adding \Poodle\Media\Item"/>
+		<col name="resource_attachment_type_width" type="SMALLINT" default="0" comment="image/video width"/>
+		<col name="resource_attachment_type_height" type="SMALLINT" default="0" comment="image/video height"/>
+		<col name="media_type_extensions" type="VARCHAR" length="255" binary="true" comment="comma seperated list of extensions"/>
+		<key name="PRIMARY" type="PRIMARY">
+			<col name="resource_attachment_type_id"/>
+		</key>
+		<key name="i_resource_attachment_type" type="UNIQUE">
+			<col name="resource_type_id"/>
+			<col name="resource_attachment_type_name"/>
+		</key>
+	</table>
+
+	<table name="resource_namespaces">
+		<col name="resource_namespace_id" type="SERIAL"/>
+		<col name="resource_namespace_prefix" type="VARCHAR" length="8" binary="true"/>
+		<col name="resource_namespace_uri" type="VARCHAR" length="255" binary="true"/>
+		<key name="PRIMARY" type="PRIMARY">
+			<col name="resource_namespace_id"/>
+		</key>
+		<key name="i_resource_namespace_prefix" type="UNIQUE">
+			<col name="resource_namespace_prefix"/>
+		</key>
+	</table>
+
+	<table name="resource_types">
+		<col name="resource_type_id" type="SERIAL"/>
+		<col name="resource_type_name" type="VARCHAR" length="32" binary="true"/>
+		<col name="resource_type_label" type="VARCHAR" length="32" binary="true"/>
+		<col name="resource_type_flags" type="TINYINT" default="0" comment="1=hidden, 2=no data"/>
+		<col name="resource_type_class" type="VARCHAR" length="64" binary="true" nullable="true"/>
+		<col name="resource_type_cssclass" type="VARCHAR" length="64" binary="true" nullable="true"/>
+		<col name="resource_bodylayout_id" type="INT" default="0"/>
+		<col name="resource_type_wysiwyg_cfg" type="VARCHAR" length="255" binary="true" nullable="true"/>
+		<key name="PRIMARY" type="PRIMARY">
+			<col name="resource_type_id"/>
+		</key>
+		<key name="i_resource_type_names" type="UNIQUE">
+			<col name="resource_type_name"/>
+		</key>
+	</table>
+
+	<table name="resource_types_fields">
+		<col name="resource_type_id" type="INT"/>
+		<col name="rtf_name" type="VARCHAR" length="64" binary="true"/>
+		<col name="rtf_label" type="VARCHAR" length="64" binary="true"/>
+		<col name="rtf_type" type="SMALLINT" comment="see \Poodle\FieldTypes::FIELD_TYPE_*"/>
+		<col name="rtf_attributes" type="TEXT" binary="true"/>
+		<col name="rtf_sortorder" type="TINYINT" default="0"/>
+		<col name="rtf_flags" type="TINYINT" default="0"/>
+		<key name="PRIMARY" type="PRIMARY">
+			<col name="resource_type_id"/>
+			<col name="rtf_name"/>
+		</key>
+	</table>
+
+	<table name="resources" engine="InnoDB">
+		<col name="resource_id" type="SERIAL"/>
+		<col name="resource_uri" type="VARCHAR" length="255" binary="true"/>
+		<col name="resource_parent_id" type="INT" default="1"/>
+		<col name="resource_type_id" type="INT" default="0" comment="one of resource_types.resource_type_id"/>
+		<col name="resource_ctime" type="INT" default="0"/>
+		<col name="resource_ptime" type="INT" default="0"/>
+		<col name="resource_etime" type="INT" default="0"/>
+		<col name="resource_flags" type="SMALLINT" default="0" comment="1=fixed uri, 2=fixed type, 4=fixed date, 8=locked"/>
+		<col name="identity_id" type="INT" default="0"/>
+		<col name="resource_bodylayout_id" type="INT" default="0"/>
+		<key name="PRIMARY" type="PRIMARY">
+			<col name="resource_id"/>
+		</key>
+		<key name="i_resource_date">
+			<!-- Used for view_public_resources -->
+			<col name="resource_ptime"/>
+			<col name="resource_etime"/>
+		</key>
+		<key name="i_resource_etime">
+			<col name="resource_id"/>
+			<col name="resource_etime"/>
+		</key>
+		<key name="i_resource_pid">
+			<col name="resource_parent_id"/>
+		</key>
+		<key name="ui_resource_uri" type="UNIQUE">
+			<col name="resource_uri" length="191"/>
+		</key>
+	</table>
+
+	<table name="resources_attachments" engine="InnoDB">
+		<col name="resource_attachment_id" type="SERIAL"/>
+		<col name="resource_id" type="INT"/>
+		<col name="media_id" type="INT"/>
+		<col name="resource_attachment_type_id" type="INT"/>
+		<col name="resource_attachment_sortorder" type="INT" default="0"/>
+		<col name="l10n_id" type="INT"/>
+		<col name="identity_id" type="INT"/>
+		<key name="PRIMARY" type="PRIMARY">
+			<col name="resource_attachment_id"/>
+		</key>
+		<key name="i_resource_attach_media_id">
+			<col name="media_id"/>
+		</key>
+		<key name="i_resource_attach_resource_id">
+			<col name="resource_id"/>
+		</key>
+	</table>
+
+	<table name="resources_data" engine="InnoDB">
+		<col name="resource_id" type="INT"/>
+		<col name="l10n_id" type="INT" default="0"/>
+		<col name="identity_id" type="INT" default="0"/>
+		<col name="resource_mtime" type="INT" default="0"/>
+		<col name="resource_title" type="VARCHAR" length="180" binary="true"/>
+		<col name="resource_body" type="TEXT" binary="true"/>
+		<col name="resource_status" type="TINYINT" default="2" comment="0=draft, 1=pending, 2=published, -1=removed"/>
+		<col name="rollback_of" type="INT" default="0"/>
+		<key name="PRIMARY" type="PRIMARY">
+			<col name="resource_id"/>
+			<col name="l10n_id"/>
+			<col name="resource_mtime"/>
+		</key>
+		<!-- Used in Admin - Resources to search -->
+		<key name="i_resource_title">
+			<col name="resource_title"/>
+		</key>
+		<!-- Might be used in view_latest_resources_data
+		<key name="i_resource_l10n_status">
+			<col name="resource_id"/>
+			<col name="l10n_id"/>
+			<col name="resource_status"/>
+		</key>
+		<key name="i_resource_mtime">
+			<col name="resource_id"/>
+			<col name="resource_mtime"/>
+		</key>
+		<key name="i_resource_mtime_l10n_status">
+			<col name="resource_id"/>
+			<col name="resource_mtime"/>
+			<col name="l10n_id"/>
+			<col name="resource_status"/>
+		</key>
+		<key name="i_resource_status">
+			<col name="resource_id"/>
+			<col name="resource_status"/>
+		</key>
+-->
+		<key name="fk_resource_data_resource_id" type="FOREIGN" references="resources" ondelete="CASCADE" onupdate="CASCADE">
+			<col name="resource_id"/>
+		</key>
+	</table>
+
+	<table name="resources_metadata">
+		<col name="resource_id" type="INT"/>
+		<col name="l10n_id" type="INT" default="0"/>
+		<col name="resource_meta_name" type="VARCHAR" length="64" binary="true"/>
+		<col name="resource_meta_value" type="TEXT" binary="true"/>
+		<col name="resource_namespace_id" type="INT" default="0"/>
+		<key name="PRIMARY" type="PRIMARY">
+			<col name="resource_id"/>
+			<col name="l10n_id"/>
+			<col name="resource_meta_name"/>
+		</key>
+	</table>
+
+	<!-- not InnoDB due to FULLTEXT index, no solution for PostgreSQL yet -->
+	<table name="resources_searchdata" engine="Aria">
+		<col name="resource_id" type="INT"/>
+		<col name="l10n_id" type="INT" default="0"/>
+		<col name="resource_searchdata" type="SEARCH" binary="true"/>
+		<col name="resource_searchtitle" type="VARCHAR" length="255" binary="true"/>
+		<key name="PRIMARY" type="PRIMARY">
+			<col name="resource_id"/>
+			<col name="l10n_id"/>
+		</key>
+		<key name="i_resource_sdata_title" type="FULLTEXT" platform="mysql">
+			<col name="resource_searchtitle"/>
+		</key>
+		<key name="i_resource_sdata_title_data" type="FULLTEXT" platform="mysql">
+			<col name="resource_searchdata"/>
+			<col name="resource_searchtitle"/>
+		</key>
+		<key name="i_resource_searchdata" type="FULLTEXT">
+			<col name="resource_searchdata"/>
+		</key>
+	</table>
+
+	<table name="searchqueries">
+		<col name="sq_id" type="SERIAL"/>
+		<col name="sq_querystring" type="TEXT" binary="true"/>
+		<key name="PRIMARY" type="PRIMARY">
+			<col name="sq_id"/>
+		</key>
+	</table>
+
+	<table name="searchqueryagents">
+		<col name="sq_id" type="INT"/>
+		<col name="sqa_ip" type="VARCHAR" length="46" binary="true"/>
+		<col name="sqa_sess_id" type="VARCHAR" length="40" binary="true"/>
+		<col name="sqa_time" type="INT"/>
+	</table>
+
+	<table name="security_domains">
+		<col name="ban_domain" type="VARCHAR" length="191" binary="true" default=""/>
+		<col name="ban_url" type="TINYINT" default="0" comment="Links in data"/>
+		<col name="ban_email" type="TINYINT" default="0" comment="email addresses with @(sub.)ban_domain"/>
+		<col name="ban_dns_mx" type="TINYINT" default="0" comment="MX entry of a domain points to this ban_domain"/>
+		<key name="PRIMARY" type="PRIMARY">
+			<col name="ban_domain"/>
+		</key>
+	</table>
+
+	<!-- InnoDB/NDB/MyRocks/TokuDB = row-level locking -->
+	<table name="sessions" engine="InnoDB">
+		<col name="sess_id" type="VARCHAR" length="40" binary="true"/>
+		<col name="identity_id" type="INT"/>
+		<col name="sess_timeout" type="SMALLINT"/>
+		<col name="sess_expiry" type="INT"/>
+		<col name="sess_ip" type="VARCHAR" length="46" binary="true"/>
+		<col name="sess_uri" type="TEXT" binary="true"/>
+		<col name="sess_user_agent" type="TEXT" binary="true"/>
+		<col name="sess_value" type="BLOB"/>
+		<key name="PRIMARY" type="PRIMARY">
+			<col name="sess_id"/>
+		</key>
+		<key name="i_sess_expiry">
+			<col name="sess_expiry"/>
+		</key>
+	</table>
+
+	<table name="users">
+		<col name="identity_id" type="SERIAL"/>
+		<col name="user_ctime" type="INT"/>
+		<col name="user_nickname" type="VARCHAR" length="128" binary="true"/>
+		<col name="user_nickname_lc" type="VARCHAR" length="128" binary="true"/>
+		<col name="user_email" type="VARCHAR" length="254" binary="true"/>
+		<col name="user_givenname" type="VARCHAR" length="100" binary="true"/>
+		<col name="user_surname" type="VARCHAR" length="100" binary="true"/>
+		<col name="user_language" type="VARCHAR" length="6" binary="true"/>
+		<col name="user_timezone" type="VARCHAR" length="64" binary="true" default=""/>
+		<col name="user_last_visit" type="INT" default="0"/>
+		<col name="user_type" type="TINYINT" default="1" comment="0=inactive, 1=member"/>
+		<col name="user_default_status" type="INT" default="1" comment="0=offline/hidden, 1=online"/>
+		<key name="PRIMARY" type="PRIMARY">
+			<col name="identity_id"/>
+		</key>
+		<key name="i_user_email" type="UNIQUE">
+			<col name="user_email" length="191"/>
+		</key>
+		<key name="i_user_nickname_lc" type="UNIQUE">
+			<col name="user_nickname_lc"/>
+		</key>
+	</table>
+
+	<table name="users_d_fields">
+		<col name="user_df_id" type="SERIAL"/>
+		<col name="user_df_section" type="VARCHAR" length="100" binary="true"/>
+		<col name="user_df_name" type="VARCHAR" length="25" binary="true"/>
+		<col name="user_df_label" type="VARCHAR" length="64" binary="true" oldname="user_df_l10n"/>
+		<col name="user_df_type" type="SMALLINT" comment="see \Poodle\FieldTypes::FIELD_TYPE_*"/>
+		<col name="user_df_attributes" type="TEXT" binary="true"/>
+		<col name="user_df_sortorder" type="TINYINT" default="0" oldname="user_df_order"/>
+		<col name="user_df_flags" type="TINYINT" default="0"/>
+		<key name="PRIMARY" type="PRIMARY">
+			<col name="user_df_id"/>
+		</key>
+	</table>
+
+	<table name="users_details">
+		<col name="identity_id" type="INT"/>
+		<col name="user_df_id" type="INT"/>
+		<col name="user_df_value" type="TEXT" binary="true" nullable="true"/>
+		<key name="PRIMARY" type="PRIMARY">
+			<col name="identity_id"/>
+			<col name="user_df_id"/>
+		</key>
+		<key name="i_user_df_user">
+			<col name="identity_id"/>
+		</key>
+	</table>
+
+	<table name="users_request">
+		<col name="request_type" type="TINYINT" default="0" comment="0=account, 1=password, 2=email"/>
+		<col name="request_time" type="INT" default="0"/>
+		<col name="request_key" type="VARCHAR" length="128" binary="true"/>
+		<col name="identity_id" type="INT" default="0"/>
+		<col name="user_nickname" type="VARCHAR" length="64" binary="true"/>
+		<col name="user_password" type="VARCHAR" length="255" binary="true" nullable="true"/>
+		<col name="user_email" type="VARCHAR" length="254" binary="true" nullable="true"/>
+		<col name="user_givenname" type="VARCHAR" length="100" binary="true" nullable="true"/>
+		<col name="user_surname" type="VARCHAR" length="100" binary="true" nullable="true"/>
+		<col name="user_details" type="BLOB" nullable="true"/>
+		<key name="PRIMARY" type="PRIMARY">
+			<col name="request_type"/>
+			<col name="request_key"/>
+		</key>
+		<key name="i_request_time">
+			<col name="request_time"/>
+		</key>
+	</table>
+
+	<view name="view_latest_resources_data"><![CDATA[SELECT
+	r.resource_id AS id,
+	r.resource_uri AS uri,
+	r.resource_parent_id AS parent_id,
+	r.resource_type_id AS type_id,
+	r.resource_ctime AS ctime,
+	r.resource_ptime AS ptime,
+	r.resource_etime AS etime,
+	r.resource_flags AS flags,
+	r.identity_id AS creator_identity_id,
+	rd.resource_mtime AS mtime,
+	rd.resource_status AS status,
+	rd.identity_id AS modifier_identity_id,
+	rd.l10n_id,
+	rd.resource_title AS title,
+	rd.resource_body AS body,
+	rt.resource_type_name AS type_name,
+	rt.resource_type_class AS type_class,
+	COALESCE(rt.resource_type_flags, 0) AS type_flags
+FROM {resources} AS r
+LEFT JOIN {resource_types} rt ON (rt.resource_type_id = r.resource_type_id)
+LEFT JOIN {resources_data} rd ON (rd.resource_id = r.resource_id
+	AND resource_mtime = (SELECT MAX(resource_mtime) AS m FROM {resources_data} AS rdt WHERE rdt.resource_id = rd.resource_id AND rdt.l10n_id = rd.l10n_id AND resource_status = 2)
+)]]></view>
+
+	<view name="view_public_resources"><![CDATA[SELECT
+	r.resource_id AS id,
+	r.resource_uri AS uri,
+	r.resource_parent_id AS parent_id,
+	r.resource_type_id AS type_id,
+	r.resource_ctime AS ctime,
+	r.resource_ptime AS ptime,
+	r.resource_etime AS etime,
+	r.resource_flags AS flags,
+	r.identity_id AS creator_identity_id,
+	rt.resource_type_name AS type_name,
+	rt.resource_type_class AS type_class,
+	COALESCE(rt.resource_type_flags, 0) AS type_flags
+FROM {resources} r
+LEFT JOIN {resource_types} rt ON (rt.resource_type_id = r.resource_type_id)
+WHERE r.resource_ptime < UNIX_TIMESTAMP() AND (r.resource_etime = 0 OR r.resource_etime > UNIX_TIMESTAMP())]]></view>
+
+	<sql>
+		<query version="20150226">ALTER TABLE {sessions} DROP COLUMN sess_time</query>
+		<query version="20160901">ALTER TABLE {users_d_fields} DROP COLUMN user_df_visible, DROP COLUMN user_df_size</query>
+		<query version="20171127">DROP TABLE {resources_forms_submits}</query>
+		<query version="20171127">DROP TABLE {resources_forms_submits_data}</query>
+
+		<!-- Queries to be executed only on specific platforms
+		<query platform="mysql">ALTER DATABASE DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_bin</query>
+		 -->
+<!--
+		# <query platform="pgsql">SET SESSION AUTHORIZATION current_user</query>
+		<query platform="pgsql">CREATE SCHEMA current_database() AUTHORIZATION current_user</query>
+		<query platform="pgsql">REVOKE ALL ON SCHEMA current_database() FROM PUBLIC</query>
+		<query platform="pgsql">ALTER USER current_user SET search_path TO current_database()</query>
+		<query platform="pgsql">ANALYZE</query>
+-->
+		<!-- Create some functions so that some MySQL-isms can be used in PostgreSQL. -->
+		<query platform="pgsql">CREATE OR REPLACE FUNCTION left(character varying, integer) RETURNS character varying AS 'select substr($1, 0, $2) as result' LANGUAGE sql</query>
+		<query platform="pgsql">CREATE OR REPLACE FUNCTION unix_timestamp() RETURNS bigint AS 'SELECT EXTRACT(EPOCH FROM CURRENT_TIMESTAMP(0))::bigint AS result' LANGUAGE 'SQL'</query>
+		<query platform="pgsql">CREATE OR REPLACE FUNCTION unix_timestamp(timestamp) RETURNS bigint AS 'SELECT EXTRACT(EPOCH FROM $1)::bigint AS result' LANGUAGE 'SQL'</query>
+		<query platform="pgsql">CREATE OR REPLACE FUNCTION unix_timestamp(timestamp WITH time zone) RETURNS bigint AS 'SELECT EXTRACT(EPOCH FROM $1)::bigint AS result' LANGUAGE 'SQL'</query>
+		<query platform="pgsql">CREATE OR REPLACE FUNCTION rand() RETURNS double precision AS 'SELECT RANDOM() as RESULT' LANGUAGE sql</query>
+		<query platform="pgsql">CREATE OR REPLACE FUNCTION concat(text, text) RETURNS text AS 'select $1 || $2' LANGUAGE sql IMMUTABLE STRICT</query>
+		<query platform="pgsql">CREATE OR REPLACE FUNCTION concat(text, text, text) RETURNS text AS 'select $1 || $2 || $3' LANGUAGE sql IMMUTABLE STRICT</query>
+		<query platform="pgsql">CREATE OR REPLACE FUNCTION concat(text, text, text, text) RETURNS text AS 'select $1 || $2 || $3 || $4' LANGUAGE sql IMMUTABLE STRICT</query>
+	</sql>
+
+</database>

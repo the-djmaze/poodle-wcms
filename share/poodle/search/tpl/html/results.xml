@@ -1,0 +1,20 @@
+
+<h1 i18n:translate="">Search</h1>
+<div>
+	<form action="" method="get" class="search">
+		<input type="search" name="q" tal:attributes="value SERVER/HTTP_SEARCH_QUERY"/><button i18n:translate="">Search</button>
+	</form>
+
+	<ul id="search-results" tal:condition="searchresult">
+		<li tal:repeat="item searchresult/items">
+			<a tal:attributes="href item/uri" tal:content="structure item/title">Titel</a><br />
+			<span tal:content="structure item/body">content</span>
+		</li>
+	</ul>
+
+	<div tal:define="pagination searchresult/pagination" tal:condition="pagination/items" class="pagination">
+		<a class="prev" tal:attributes="href pagination/prev" tal:condition="pagination/prev">◀</a>
+		<a tal:repeat="item pagination/items" tal:attributes="href item/uri; class php:${item/uri}?null:'current'" tal:content="item/page"></a>
+		<a class="next" tal:attributes="href pagination/next" tal:condition="pagination/next">▶</a>
+	</div>
+</div>

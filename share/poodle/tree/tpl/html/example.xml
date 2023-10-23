@@ -1,0 +1,6 @@
+
+<ul class="tree">
+	<li tal:repeat="item tree_items" tal:attributes="class php:${item/hasChildren}?'unfolds':${item/class}">
+		<a tal:attributes="href item/id"><span tal:replace="item/name">index</span></a>
+	</li>
+</ul>

@@ -1,0 +1,93 @@
+
+<div class="table" id="admin-groups">
+
+<div id="leftside">
+	<div id="leftside-body">
+		<a href="#group-general" i18n:translate="">General</a>
+		<a href="#group-permissions" i18n:translate="">Permissions</a>
+		<a href="#group-members" i18n:translate="">Members</a>
+	</div>
+	<div id="leftside-foot">
+		<a href="0" class="new" i18n:translate="">New</a>
+	</div>
+</div>
+
+<div id="main-content">
+	<form action="" method="post" autocomplete="off">
+	<div id="group-general" class="section-panel">
+		<label>
+			<span i18n:translate="">Name</span>
+			<input name="group[name]" type="text" tal:attributes="value group/name"/>
+		</label>
+
+		<label tal:condition="parent_groups">
+			<span i18n:translate="">Parent</span>
+			<select name="group[parent]">
+				<option value="0"></option>
+				<option tal:repeat="p parent_groups" tal:attributes="value p/id; selected php:${p/id}==${group/parent}" tal:content="p/name"></option>
+			</select>
+		</label>
+
+		<label>
+			<span i18n:translate="">Type</span>
+			<select name="group[type][]">
+				<option value="0" i18n:translate="">Open</option>
+				<option value="1" i18n:translate="" tal:attributes="selected php:${group/type}&amp;1">Closed</option>
+			</select>
+		</label>
+
+		<label>
+			<span i18n:translate="">Hidden</span>
+			<input name="group[type][]" type="checkbox" value="2" tal:attributes="checked php:${group/type}&amp;2"/>
+		</label>
+
+		<label>
+			<span i18n:translate="">Description</span>
+			<textarea name="group[description]" tal:content="group/description"></textarea>
+		</label>
+	</div>
+
+	<div id="group-permissions" class="section-panel">
+		<table><thead>
+			<tr>
+				<th>Path</th>
+				<th tal:repeat="action acl_actions" tal:content="L10N/${action}">action</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr tal:repeat="acl group_acl">
+				<td tal:content="acl/path"></td>
+				<td tal:repeat="action acl/actions"><span tal:condition="action/active">✓</span></td>
+			</tr>
+		</tbody><tfoot>
+			<tr>
+				<td><input name="group_acl[path]" type="text"/></td>
+				<td tal:repeat="action acl_actions"><input name="group_acl[actions][]" type="checkbox" tal:attributes="value repeat/action/key"/></td>
+			</tr>
+		</tfoot>
+		</table>
+	</div>
+
+	<div id="group-members" class="section-panel">
+		<table><thead>
+			<tr>
+				<th></th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr tal:repeat="member group_members">
+				<td><a tal:attributes="href '/admin/poodle_identity/${member/id}'" tal:content="member/nickname"></a></td>
+				<td><span tal:condition="member/status">✓</span></td>
+			</tr>
+		</tbody>
+		</table>
+	</div>
+
+	<div id="main-content-foot">
+		<button i18n:translate="">Save</button>
+	</div>
+	</form>
+</div>
+
+</div>

@@ -1,0 +1,85 @@
+<div class="table" id="admin-resource-default">
+
+<div id="leftside" class="resizable">
+	<div id="leftside-body">
+		<b i18n:translate="">Export</b>
+		<ul>
+			<li><a href="?export=data" i18n:translate="">Data</a></li>
+			<li><a href="?export=schema" i18n:translate="">Schema</a></li>
+			<li><a href="?tables=list" i18n:translate="">Table</a></li>
+		</ul>
+		<b i18n:translate="">Tables</b>
+		<ul>
+			<li><a href="?tables=analyze" i18n:translate="">Analyze</a></li>
+			<li><a href="?tables=check" i18n:translate="">Check</a></li>
+			<li><a href="?tables=optimize" i18n:translate="">Optimize</a></li>
+		</ul>
+	</div>
+</div>
+
+<div id="main-content">
+	<div>
+		<form method="post" action="/admin/poodle_sql/">
+		<fieldset>
+			<legend i18n:translate="">Execute SQL Query</legend>
+			<input type="hidden" name="mode" value="execute"/>
+			<textarea name="sql_query" tal:content="sql_query"></textarea>
+			<button name="execute" i18n:translate="">Execute</button>
+		</fieldset>
+		</form>
+
+		<table tal:condition="query_result">
+		<thead><tr>
+			<th tal:repeat="field query_result/fetch_fields" tal:content="field/name"></th>
+		</tr></thead>
+		<tbody>
+		<tr tal:repeat="row query_result">
+			<td tal:repeat="value row" tal:content="value"></td>
+		</tr>
+		</tbody>
+		</table>
+
+		<table tal:condition="sql_tables">
+		<thead><tr>
+			<th i18n:translate="">Name</th>
+			<th i18n:translate="">Comment</th>
+			<th i18n:translate="">Export</th>
+		</tr></thead>
+		<tbody>
+		<tr tal:repeat="table sql_tables">
+			<td tal:content="table/name"></td>
+			<td tal:content="table/comment"></td>
+			<td>
+				<a tal:attributes="href '?export=csv&amp;table=${table/name}'">CSV</a> |
+				<a tal:attributes="href '?export=xml&amp;table=${table/name}'">XML</a> |
+				<a tal:attributes="href '?export=xlsx&amp;table=${table/name}'">XLSX</a>
+			</td>
+		</tr>
+		</tbody>
+		</table>
+
+		<form action="?import" method="post" enctype="multipart/form-data" tal:condition="not:query_result||sql_tables">
+		<fieldset>
+			<legend i18n:translate="">Import</legend>
+			<label>
+				<span i18n:translate="">XML file</span>
+				<input type="file" name="import_xml" required=""/>
+			</label>
+			<button i18n:translate="">Import</button>
+			<progress style="display:block;width:100%;margin:1em 0;" hidden=""></progress>
+			<dialog id="import_xml_dialog">
+				<h1 i18n:translate="">Import completed!</h1>
+				<button type="button" i18n:translate="">close</button>
+			</dialog>
+			<dialog id="import_xml_errors_dialog">
+				<h1 class="error" i18n:translate="">Import has errors!</h1>
+				<ul></ul>
+				<button type="button" i18n:translate="">close</button>
+			</dialog>
+		</fieldset>
+		</form>
+
+	</div>
+</div>
+
+</div>

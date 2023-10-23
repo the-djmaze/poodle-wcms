@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<url tal:repeat="url sitemap_entries">
+	<loc tal:content="url/loc">https://example.org/</loc>
+	<lastmod tal:condition="url/lastmod" tal:content="url/lastmod">2010-04-10T17:39:47+00:00</lastmod>
+	<changefreq tal:condition="url/changefreq" tal:content="url/changefreq"></changefreq>
+	<priority tal:condition="url/priority" tal:content="url/priority"></priority>
+</url>
+</urlset>

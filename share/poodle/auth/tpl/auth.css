@@ -1,0 +1,54 @@
+/**
+* Poodle WCMS, Copyright (c) MH X Solutions since 2010. All rights reserved.
+*/
+
+.auth input { background:none no-repeat 0 50%; }
+/*header .auth input:focus { width:250px; }*/
+.auth input[name=openid_identifier] { background-image:url(../images/16x16/openid.png); padding-left:18px; }
+.auth-other input[name=openid_identifier],
+.auth-database input[name=openid_identifier],
+.auth input[name=auth_claimed_id] { background-image:url(../images/16x16/user-identity.png); padding-left:18px; }
+
+.auth .providers {
+	margin-top:4px;
+	text-align:center;
+}
+.auth .providers div {
+	text-align:left;
+}
+.auth .providers a {
+	background:url(../images/auth-providers.png);
+	display:inline-block;
+	height:32px;
+	margin:1px;
+	width:32px;
+	/**
+	 * Only text-indent to hide text sucks as it makes the outline
+	 * border very wide to the left, so we also use overflow
+	 */
+	overflow:hidden;
+	text-indent:-20em;
+}
+.auth .providers a:focus,
+.auth .providers a:hover {
+	border-radius:4px;
+	box-shadow:0 0 2px 1px Highlight;
+	transform:scale(1.2);
+}
+
+.auth .providers .AOL {}
+.auth .providers .Blogger {background-position: -32px 0}
+.auth .providers .ClaimID {background-position: -64px 0}
+.auth .providers .Flickr  {background-position: -96px 0}
+.auth .providers .Google  {background-position:-128px 0}
+
+.auth .providers .LiveJournal {background-position: -32px -32px}
+.auth .providers .myOpenID    {background-position: -64px -32px}
+.auth .providers .MySpace     {background-position: -96px -32px}
+.auth .providers .Technorati  {background-position:-128px -32px}
+
+.auth .providers .Verisign  {background-position:   0   -64px}
+.auth .providers .Vidoop    {background-position: -32px -64px}
+.auth .providers .Wordpress {background-position: -64px -64px}
+.auth .providers .Yahoo     {background-position: -96px -64px}
+.auth .providers .I-Name    {background-position:-128px -64px}

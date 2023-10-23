@@ -1,0 +1,110 @@
+<div class="table" id="admin-info">
+
+<div id="leftside" class="resizable">
+	<div id="leftside-body">
+		<a href="#general" i18n:translate="">General</a>
+		<a href="#php-vars" i18n:translate="">PHP Variables</a>
+		<a href="#php-config" i18n:translate="">PHP Configuration</a>
+		<a href="#php-modules" i18n:translate="">PHP Modules</a>
+		<a href="#system-check">System Check</a>
+		<hr/>
+		<a href="?backup">Backup website tar.gz</a>
+		<a href="?backup=zip">Backup website zip</a>
+	</div>
+</div>
+
+<div id="main-content">
+	<style type="text/css">#php-modules th, #php-modules td { width:33% }</style>
+
+	<div class="section-panel" id="general">
+		<table><thead>
+			<tr>
+				<th i18n:translate="">Setting</th>
+				<th i18n:translate="">Value</th>
+			</tr>
+		</thead><tbody>
+			<tr>
+				<td>Disk space</td>
+				<td><meter tal:attributes="value disk_space/used; max disk_space/total" min="0"></meter>
+					<var tal:replace="php:here.L10N.filesizeToHuman(${disk_space/free})">0</var> free
+				</td>
+			</tr>
+			<tr tal:repeat="item info_general">
+				<td tal:content="repeat/item/key">name</td>
+				<td tal:content="item">value</td>
+			</tr>
+		</tbody></table>
+	</div>
+
+	<div class="section-panel" id="php-vars">
+		<table><thead>
+			<tr>
+				<th i18n:translate="">Setting</th>
+				<th i18n:translate="">Value</th>
+			</tr>
+		</thead><tbody>
+			<tr tal:repeat="item info_vars">
+				<td tal:content="repeat/item/key">name</td>
+				<td tal:content="item">value</td>
+			</tr>
+		</tbody></table>
+	</div>
+
+	<div class="section-panel" id="php-config">
+		<table><thead>
+			<tr>
+				<th i18n:translate="">Setting</th>
+				<th i18n:translate="">Current value</th>
+				<th i18n:translate="">Default value</th>
+			</tr>
+		</thead><tbody>
+			<tr tal:repeat="item info_config">
+				<td tal:content="repeat/item/key">name</td>
+				<td tal:condition="php:is_array(${item})" tal:content="item/value">value</td>
+				<td tal:condition="php:is_array(${item})" tal:content="item/master">value</td>
+				<td tal:condition="not:php:is_array(${item})" colspan="2" tal:content="item">value</td>
+			</tr>
+		</tbody></table>
+	</div>
+
+	<div class="section-panel" id="php-modules">
+		<div tal:omit-tag="" tal:repeat="module info_modules">
+			<h2 tal:content="module/name" tal:attributes="id module/name">module</h2>
+			<table><thead>
+				<tr>
+					<th i18n:translate="">Setting</th>
+					<th i18n:translate="">Current value</th>
+					<th i18n:translate="">Default value</th>
+				</tr>
+			</thead><tbody>
+				<tr tal:repeat="item module/items">
+					<td tal:content="repeat/item/key">name</td>
+					<td tal:condition="php:is_array(${item})" tal:content="item/value">value</td>
+					<td tal:condition="php:is_array(${item})" tal:content="item/master">value</td>
+					<td tal:condition="not:php:is_array(${item})" colspan="2" tal:content="item">value</td>
+				</tr>
+			</tbody></table>
+		</div>
+	</div>
+
+	<div class="section-panel" id="system-check">
+		<table><tbody>
+			<tr><th colspan="3" i18n:translate="">Access Privileges</th></tr>
+			<tr class="ok" tal:repeat="item check/dirs" tal:attributes="class item/CLASS">
+				<td tal:content="item/TITLE">title</td>
+				<td class="status" tal:content="item/STATUS">status</td>
+				<td><i class="infobox"><span tal:content="item/INFO">info</span></i></td>
+			</tr>
+		</tbody><tbody>
+			<tr><th colspan="3" i18n:translate="">PHP Extensions</th></tr>
+			<tr class="fail" tal:repeat="item check/php" tal:attributes="class item/CLASS">
+				<td><a href="#" tal:content="item/TITLE" tal:attributes="href item/URI">title</a></td>
+				<td class="status" tal:content="item/STATUS">status</td>
+				<td><i class="infobox"><span tal:content="item/INFO">info</span></i></td>
+			</tr>
+		</tbody></table>
+	</div>
+
+</div>
+
+</div>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html
+	xmlns:tal="http://xml.zope.org/namespaces/tal"
+	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+	xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+	tal:attributes="lang L10N/lng">
+<head>
+	<title tal:content="string:Poodle WCMS Installer: ${head/title}">Poodle WCMS Installer: Step</title>
+	<link tal:repeat="link head/link" tal:attributes="rel link/rel; href link/href; media link/media; type link/type" rel="stylesheet" href="../css/default/reset;poodle-debugger;poodle-setup.css" type="text/css" media="screen"/>
+	<meta tal:repeat="meta head/meta" tal:attributes="name meta/name; content meta/content; http-equiv meta/httpEquiv" content=""/>
+	<script tal:repeat="script head/script/src" tal:attributes="src script" src="../javascript/poodle;poodle-debugger;poodle-setup.js"></script>
+	<script tal:condition="head/script/cdata" tal:content="head/script/cdata"></script>
+</head>
+<body>
+<header id="header">
+	<div style="float:right;margin:10px 1px 0 0;">
+	<span tal:omit-tag="" i18n:translate="">Language</span>
+	<select>
+		<option value="en">English</option>
+		<option value="nl">Nederlands</option>
+	</select></div>
+	<h1>Poodle WCMS Installer</h1>
+	<div id="menu"><ol>
+	<li tal:repeat="item menu" tal:content="item/title" tal:attributes="class item/class">License</li>
+	<li tal:condition="" class="current">Server Check</li>
+	<li tal:condition="">Configuration</li>
+	<li tal:condition="">Database</li>
+	<li tal:omit-tag="" tal:content="">Create Account</li>
+	</ol></div>
+</header>
+<div id="content">

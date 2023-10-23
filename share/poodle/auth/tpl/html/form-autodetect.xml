@@ -1,0 +1,9 @@
+
+<form method="post" action="?auth" class="auth" tal:condition="not:IDENTITY/id"><div>
+	<input type="text" name="openid_identifier"/><button i18n:translate="Login">Login</button>
+	<div class="auth-fields overlay">
+		<label tal:condition="CONFIG/auth_cookie/allow"><input type="checkbox" value="1" name="auth_cookie"/> Remember me</label>
+		<button type="reset" i18n:translate="Reset">Reset</button>
+		<div class="providers"></div>
+	</div>
+</div></form>

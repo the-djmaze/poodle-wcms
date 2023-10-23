@@ -1,0 +1,5 @@
+
+#l10n-settings td + td + td,
+#l10n-settings th + th + th {
+	text-align:center;
+}

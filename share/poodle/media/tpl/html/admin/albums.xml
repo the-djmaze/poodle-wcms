@@ -1,0 +1,50 @@
+<div class="table" id="admin-media-albums">
+
+<div id="leftside" class="resizable">
+	<div id="leftside-body">
+		<a href="#albums-active" i18n:translate="">Active</a>
+		<a href="#albums-inactive" tal:condition="inactive_albums/count" i18n:translate="">Inactive</a>
+	</div>
+	<div id="leftside-foot">
+		<!--<a href="/admin/poodle_media_albums/0" class="new" i18n:translate="">New</a>-->
+		<a href="/admin/resources/0?type=10" class="new" i18n:translate="">New</a>
+	</div>
+</div>
+
+<div id="main-content">
+	<div id="albums-active" class="section-panel">
+		<table>
+			<thead><tr>
+				<th i18n:translate="">Name</th>
+				<th i18n:translate="">Items</th>
+				<th i18n:translate="">Created</th>
+			</tr></thead>
+			<tbody>
+			<tr tal:repeat="album active_albums">
+				<td><a tal:attributes="href '/admin/resources/${album/id}'" tal:content="album/title"></a></td>
+				<td tal:content="album/items_count"></td>
+				<td tal:content="php:context.L10N.date('r',${album/ctime})"></td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<div id="albums-inactive" class="section-panel">
+		<table>
+			<thead><tr>
+				<th i18n:translate="">Name</th>
+				<th i18n:translate="">Items</th>
+				<th i18n:translate="">Created</th>
+			</tr></thead>
+			<tbody>
+			<tr tal:repeat="album inactive_albums">
+				<td><a tal:attributes="href '/admin/resources/${album/id}'" tal:content="album/title"></a></td>
+				<td tal:content="album/items_count"></td>
+				<td tal:content="php:context.L10N.date('r',${album/ctime})"></td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+</div>

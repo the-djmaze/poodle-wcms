@@ -1,0 +1,23 @@
+
+#media-albums {
+	padding: 0;
+}
+#media-albums li {
+	display:inline-block;
+	min-width:300px;
+	vertical-align: top;
+	width: 49%;
+}
+#media-albums li > * {
+	margin-left: 120px;
+	vertical-align:top;
+}
+#media-albums li > *:first-child {
+	border:1px solid #eee;
+	float:left;
+	margin:4px;
+	padding:4px;
+}
+#media-albums h2 {
+	margin:0;
+}

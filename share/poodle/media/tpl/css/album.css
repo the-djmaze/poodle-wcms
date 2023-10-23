@@ -1,0 +1,40 @@
+
+@import "poodle_media_photoswipe";
+@import "poodle_media_photoswipe-ui";
+
+#media-album-items figure {
+	border:1px solid #eee;
+	display:inline-block;
+	margin:0 20px 20px 0;
+	padding:4px;
+}
+
+#media-album-items-overlay .window {
+	width: 820px;
+}
+
+#media-album-items-overlay .body {
+	text-align:center;
+	position:relative;
+}
+
+#media-album-items-overlay .prev,
+#media-album-items-overlay .next {
+	background:rgba(255,255,255,0.2);
+	bottom:0;
+	color:threedface;
+	cursor:pointer;
+	font-size:50px;
+	padding:0 4px;
+	position:absolute;
+	line-height:600px;
+	text-shadow:0 0 1px #000;
+	top:0;
+	opacity:0;
+}
+#media-album-items-overlay .prev:hover,
+#media-album-items-overlay .next:hover {
+	opacity:inherit;
+}
+#media-album-items-overlay .prev { left:0; }
+#media-album-items-overlay .next { right:0; }

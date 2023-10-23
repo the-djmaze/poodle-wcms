@@ -1,0 +1,42 @@
+
+<form action="" method="post">
+
+First we need to verify that you are an administrator of this website.
+Therefore you must fill in the FTP login details or create the file:
+<div tal:content="sid_file">sid_file</div>
+
+<div tal:condition="FATAL_ERROR" class="error">
+	FTP Connection failed or file does not exists.
+</div>
+
+<table>
+<tbody>
+	<tr>
+		<td>Host</td>
+		<td><input type="text" name="ftp[host]" tal:attributes="value ftp/host" style="width:300px"/></td>
+	</tr>
+
+	<tr>
+		<td>Username</td>
+		<td><input type="text" name="ftp[user]" tal:attributes="value ftp/user" style="width:300px"/></td>
+	</tr>
+
+	<tr>
+		<td>Passphrase</td>
+		<td><input type="password" name="ftp[pass]" style="width:300px"/></td>
+	</tr>
+
+	<tr>
+		<td>Path</td>
+		<td><input type="text" name="ftp[path]" tal:attributes="value ftp/path" style="width:300px"/></td>
+	</tr>
+
+</tbody>
+</table>
+
+<div id="stepbuttons">
+	<button i18n:translate="">Verify</button>
+<!--	<button type="reset" i18n:translate="">Reset</button> -->
+</div>
+
+</form>

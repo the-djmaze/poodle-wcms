@@ -1,0 +1,17 @@
+
+<div id="main-content">
+	<div id="admin-resources">
+		<table class="sortable"><thead><tr>
+			<th i18n:translate="">Path</th>
+			<th class="type" i18n:translate="">Type</th>
+			<th tal:attributes="class 'date ${sortorder_fields/etime/class}'"><a tal:attributes="href sortorder_fields/etime/href" i18n:translate="">Expired on</a></th>
+		</tr></thead><tbody>
+			<tr tal:repeat="resource resources">
+				<td><a href="" tal:attributes="href '/admin/resources/${resource/id}'" tal:content="resource/uri">index</a></td>
+				<td tal:content="php:context.L10N.dbget(${resource/type_label})"></td>
+				<td tal:content="php:context.L10N.date('DATE_T',${resource/etime})"></td>
+			</tr>
+		</tbody>
+		</table>
+	</div>
+</div>

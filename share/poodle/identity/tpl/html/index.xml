@@ -1,0 +1,110 @@
+<div class="table" id="admin-identities">
+
+<div id="leftside">
+	<div id="leftside-body">
+		<a href="#list" i18n:translate="">List</a>
+		<b>Group</b>
+		<ul>
+			<li tal:repeat="group groups"><a tal:attributes="href '?group=${repeat/group/key}#list'" tal:content="group"></a></li>
+		</ul>
+
+		<a href="#configuration" i18n:translate="">Configuration</a>
+	</div>
+	<div id="leftside-foot">
+		<a href="0" class="new" i18n:translate="">New</a>
+	</div>
+</div>
+
+<div id="main-content">
+	<div id="list" class="section-panel">
+		<form action="" method="get" class="filter">
+			<select name="field">
+				<option tal:repeat="field identity_sort_fields" tal:attributes="value field/value; selected php:${field/value}==$_GET['field']" tal:content="field/label"></option>
+			</select>
+
+			<input type="checkbox" name="desc" tal:attributes="checked php:$_GET['desc']"/>
+			<span style="line-height:19px;" i18n:translate="">Descending</span>
+
+			<button i18n:translate="">Sort</button>
+
+			<input type="text" name="q" tal:attributes="value SERVER/HTTP_SEARCH_QUERY"/>
+
+			<button i18n:translate="">Search</button>
+		</form>
+
+		<table><thead>
+			<tr tal:condition="identities_pagination/items"><td colspan="0" class="pagination">
+				<a class="prev" tal:attributes="href identities_pagination/prev" tal:condition="identities_pagination/prev">◀</a>
+				<span>
+					<a class="current" tal:content="identities_pagination/current"></a>
+					<span>
+						<a tal:repeat="item identities_pagination/allItems" tal:attributes="href item/uri; class php:${item/uri}?null:'current'" tal:content="item/page"></a>
+					</span>
+					/ <a tal:content="identities_pagination/count"></a>
+				</span>
+				<a class="next" tal:attributes="href identities_pagination/next" tal:condition="identities_pagination/next">▶</a>
+			</td></tr>
+			<tr>
+				<th tal:repeat="field identities/fetch_fields" tal:content="php:context.L10N.get(${field/name})"></th>
+				<th></th>
+			</tr>
+		</thead><tbody>
+		<tr tal:repeat="identity identities">
+			<td tal:repeat="field identity">
+				<span tal:condition="php:'last_visit'==${repeat/field/key}" tal:replace="php:${identity/last_visit}?context.L10N.date('DATE_T',${identity/last_visit}):context.L10N.get('never')">dd-mm-jjjj, hh:mm</span>
+				<span tal:condition-else="php:'ctime'==${repeat/field/key}" tal:replace="php:here.L10N.date('DATE_T',${field})">dd-mm-jjjj, hh:mm</span>
+				<span tal:condition-else="" tal:replace="field"></span>
+			</td>
+			<td>
+				<a tal:attributes="href '?takeover=${identity/ID}'" i18n:attributes="title" title="takeover" style="font-size:14px;line-height:10px;text-decoration:none">⇆</a>
+				<a tal:attributes="href identity/ID" i18n:attributes="title" title="edit" class="icon-edit"></a>
+			</td>
+		</tr>
+		</tbody>
+		<tfoot tal:condition="identities_pagination/items">
+			<tr><td colspan="0" class="pagination">
+				<a class="prev" tal:attributes="href identities_pagination/prev" tal:condition="identities_pagination/prev">◀</a>
+				<span>
+					<a class="current" tal:content="identities_pagination/current"></a>
+					<span class="up">
+						<a tal:repeat="item identities_pagination/allItems" tal:attributes="href item/uri; class php:${item/uri}?null:'current'" tal:content="item/page"></a>
+					</span>
+					/ <a tal:content="identities_pagination/count"></a>
+				</span>
+				<a class="next" tal:attributes="href identities_pagination/next" tal:condition="identities_pagination/next">▶</a>
+			</td></tr>
+		</tfoot>
+		</table>
+	</div>
+
+	<div id="configuration" class="section-panel">
+		<form action="" method="post">
+
+			<label>
+				<span i18n:translate="">Nickname minimum length</span>
+				<input type="number" name="config[identity][nick_minlength]" min="1" max="20" tal:attributes="value CONFIG/identity/nick_minlength"/>
+			</label>
+			<label>
+				<span i18n:translate="">Passphrase minimum length</span>
+				<input type="number" name="config[identity][passwd_minlength]" min="1" max="20" tal:attributes="value CONFIG/identity/passwd_minlength"/>
+			</label>
+			<label>
+				<span i18n:translate="">Nickname deny regex</span>
+				<input type="text" name="config[identity][nick_deny]" tal:attributes="value CONFIG/identity/nick_deny"/>
+			</label>
+			<label>
+				<span i18n:translate="">Nickname disallowed characters</span>
+				<input type="text" name="config[identity][nick_invalidchars]" tal:attributes="value CONFIG/identity/nick_invalidchars"/>
+			</label>
+			<label>
+				<span>Identity class</span>
+				<input type="text" name="config[poodle][identity_class]" tal:attributes="value CONFIG/poodle/identity_class"/>
+			</label>
+
+			<button type="reset" i18n:translate="">Reset</button>
+			<button i18n:translate="">Save</button>
+		</form>
+	</div>
+</div>
+
+</div>

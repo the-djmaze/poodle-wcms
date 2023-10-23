@@ -1,0 +1,41 @@
+
+	<div id="leftside-body">
+		<b i18n:translate="">Show</b>
+		<ul>
+			<li><a href="?showhidden" i18n:translate="">Hidden</a></li>
+			<li><a href="?showexpired" i18n:translate="">Expired</a></li>
+		</ul>
+
+		<b i18n:translate="">Type</b>
+		<ul>
+			<li><a href="/admin/resources/" i18n:translate="">All</a></li>
+			<li tal:repeat="type resource_types">
+				<a tal:attributes="href '?type=${type/id}'" tal:content="type/label">index</a>
+			</li>
+<!--
+			<xsl:for-each select="resource_types">
+			<li tal:condition="php:${resource_types/flags}&amp;4">
+				<a tal:attributes="href '?type=${resource_types/id}'" tal:content="resource_types/name">index</a>
+			</li>
+			</xsl:for-each>
+-->
+		</ul>
+
+		<b i18n:translate="">Recently</b>
+		<ul>
+			<li><a href="?recent=ctime" i18n:translate="">Added</a></li>
+			<li><a href="?recent=mtime" i18n:translate="">Modified</a></li>
+			<li><a href="?recent=ptime" i18n:translate="">Published</a></li>
+			<li><a href="?recent=etime" i18n:translate="">Expired</a></li>
+		</ul>
+
+		<b i18n:translate="">Languages</b>
+		<ul>
+			<li tal:repeat="language L10N/getActiveList"><a tal:attributes="href '?l10n=${language/id}'" tal:content="language/label">English</a></li>
+			<li tal:repeat="language L10N/getInactiveList"><a tal:attributes="href '?l10n=${language/id}'" tal:content="language/label">English</a></li>
+		</ul>
+	</div>
+	<div id="leftside-foot">
+		<a tal:condition="php:!isset($_GET['type'])" href="/admin/resources/0" class="new" i18n:translate="">New</a>
+		<a tal:condition="php:isset($_GET['type'])" tal:attributes="href php:'/admin/resources/0?type=${REQUEST/GET/type}'" class="new" i18n:translate="">New</a>
+	</div>

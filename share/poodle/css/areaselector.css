@@ -1,0 +1,56 @@
+
+.poodle-areaselector {
+	box-shadow:0 0 2px 1px #999;
+	padding:1px;
+	display:inline-block;
+	position:relative;
+	overflow: hidden;
+}
+
+.poodle-areaselector .hidden {
+	display:none;
+}
+
+.poodle-areaselector .outside {
+	background:#000;
+	opacity:0.6;
+	position:absolute;
+	top:0;
+	right:0;
+	bottom:0;
+	left:0;
+}
+
+.poodle-areaselector .selection {
+	background-color:rgba(255,255,255,0.6);
+	background-clip: padding-box;
+	border:1px dashed #F90;
+	border-image: url("../images/border-ani.gif") 1 round;
+	overflow:hidden;
+	position:absolute;
+}
+
+.poodle-areaselector .block {
+	background-color:#CCC;
+	mix-blend-mode: hard-light;
+	border: 1px solid #000;
+	display:none;
+	height:8px;
+	position:absolute;
+	width:8px;
+	z-index: 2147483647;
+}
+.poodle-areaselector .block:hover {
+	mix-blend-mode: normal;
+}
+.poodle-areaselector:hover .block {
+	display:block;
+}
+.poodle-areaselector .block.tl { top:0; left:0; border-top: 0; border-left: 0; }
+.poodle-areaselector .block.t  { top:0; left:48%; border-top: 0; }
+.poodle-areaselector .block.tr { top:0; right:0; border-top: 0; border-right: 0; }
+.poodle-areaselector .block.r  { top:48%; right:0; border-right: 0; }
+.poodle-areaselector .block.br { bottom:0; right:0; border-bottom: 0; border-right: 0; }
+.poodle-areaselector .block.b  { bottom:0; left:48%; border-bottom: 0; }
+.poodle-areaselector .block.bl { bottom:0; left:0; border-bottom: 0; border-left: 0; }
+.poodle-areaselector .block.l  { top:48%; left:0; border-left: 0; }

@@ -1,0 +1,191 @@
+<div class="table" id="admin-config">
+
+<div id="leftside">
+	<div id="leftside-body">
+		<a href="#config-general" i18n:translate="">General</a>
+		<a href="#config-output" i18n:translate="">Page</a>
+		<a href="#config-privacy" i18n:translate="">Privacy Policy</a>
+		<a href="#config-maintenance" i18n:translate="">Maintenance</a>
+	</div>
+</div>
+
+<div id="main-content">
+<form action="" method="post" class="ask-unload" enctype="multipart/form-data">
+	<div id="config-groups">
+		<div id="config-general" class="section-panel">
+			<label>
+				<span i18n:translate="">Site name</span>
+				<input type="text" name="config[site][name]" tal:attributes="value CONFIG/site/name"/>
+			</label>
+
+			<label>
+				<span i18n:translate="">Description</span>
+				<input type="text" name="config[site][description]" tal:attributes="value CONFIG/site/description" maxlength="160"/>
+			</label>
+
+			<label>
+				<span i18n:translate="">Time zone</span>
+				<select name="config[site][timezone]">
+					<option value="UTC">UTC</option>
+					<xsl:for-each select="L10N/timezones">
+					<optgroup label="" tal:condition="php:is_array(${timezones})" tal:attributes="label repeat/timezones/key">
+						<xsl:for-each select="timezones">
+						<option tal:condition="repeat/timezones/key" tal:attributes="value repeat/timezones/key; selected php:${repeat/timezones/key}===${CONFIG/site/timezone}" tal:content="timezones"></option>
+						</xsl:for-each>
+					</optgroup>
+					</xsl:for-each>
+				</select>
+			</label>
+
+			<fieldset>
+				<legend i18n:translate="">Owner</legend>
+
+				<label>
+					<span i18n:translate="">Company name</span>
+					<input type="text" name="config[site][company]" tal:attributes="value CONFIG/site/company"/>
+				</label>
+
+				<label>
+					<span i18n:translate="">Address</span>
+					<input type="text" name="config[site][address]" tal:attributes="value CONFIG/site/address"/>
+				</label>
+
+				<label>
+					<span i18n:translate="">Postcode</span>
+					<input type="text" name="config[site][postcode]" tal:attributes="value CONFIG/site/postcode"/>
+				</label>
+
+				<label>
+					<span i18n:translate="">Locality</span>
+					<input type="text" name="config[site][locality]" tal:attributes="value CONFIG/site/locality"/>
+				</label>
+
+				<label>
+					<span i18n:translate="">Country</span>
+					<select name="config[site][country_code]" tal:define="country_code CONFIG/site/country_code">
+						<option></option>
+						<option tal:repeat="option L10N/getCountries" tal:attributes="value option/value; selected php:${option/value}==${country_code}" tal:content="option/label"></option>
+					</select>
+				</label>
+
+				<label>
+					<span i18n:translate="">Phone number</span>
+					<input type="tel" name="config[site][phonenumber]" tal:attributes="value CONFIG/site/phonenumber"/>
+				</label>
+			</fieldset>
+		</div>
+
+		<div id="config-output" class="section-panel">
+			<label>
+				<span i18n:translate="">Template</span>
+				<select name="config[output][template]">
+					<option tal:repeat="tpl output_templates" tal:attributes="value tpl/value; selected tpl/selected" tal:content="tpl/label"></option>
+				</select>
+			</label>
+
+			<label>
+				<span i18n:translate="">Crumb</span>
+				<input type="text" name="config[output][crumb]" tal:attributes="value CONFIG/output/crumb"/>
+			</label>
+
+			<label>
+				<span i18n:translate="">Title format</span>
+				<input type="text" name="config[output][title_format]" tal:attributes="value CONFIG/output/title_format"/>
+				<em class="infobox">
+					<span>
+					<i i18n:translate="">Multiple meta options allowed</i>
+					<dl>
+						<dt>{RESOURCE/title}</dt>
+						<dd i18n:translate="">The resource title</dd>
+
+						<dt>{crumbs}</dt>
+						<dd i18n:translate="">All breadcrumbs</dd>
+
+						<dt>{crumbs_reversed}</dt>
+						<dd i18n:translate="">All breadcrumbs in reversed order</dd>
+
+						<dt>{site/name}</dt>
+						<dd i18n:translate="">Website name</dd>
+					</dl>
+					</span>
+				</em>
+			</label>
+
+			<label>
+				<span i18n:translate="">Footer</span>
+				<textarea class="wysiwyg" name="config[output][footer]" tal:content="CONFIG/output/footer"></textarea>
+			</label>
+
+			<label>
+				<span i18n:translate="">Facebook Image</span>
+				<input type="file" name="upload_og_image"/><br/>
+				<input type="checkbox" name="remove_og_image"/> Remove image<br/>
+				<img tal:attributes="src CONFIG/output/og_image" alt=""/>
+			</label>
+
+			<label>
+				<span i18n:translate="">Google analytics code</span>
+				<input type="text" name="config[output][google_analytics]" placeholder="UA-xxxxxxx-x" tal:attributes="value CONFIG/output/google_analytics"/>
+			</label>
+<!--
+			<label>
+				<input type="checkbox" name="config[output][google_analytics_external]" tal:attributes="checked CONFIG/output/google_analytics_external"/>
+				<span i18n:translate="">Google analytics track external links</span>
+			</label>
+-->
+			<label>
+				<span i18n:translate="">Google webmaster code</span>
+				<input type="text" name="config[output][google_verification]" placeholder="aB1cdEFghijk2L3mnoPQR-4sTuV5Wxy67zABCdeFGhI" tal:attributes="value CONFIG/output/google_verification"/>
+			</label>
+		</div>
+
+		<div id="config-privacy" class="section-panel">
+			<fieldset>
+				<legend>Website has</legend>
+				<label tal:repeat="app privacy_has">
+					<input type="checkbox" tal:attributes="name 'config[privacy][${repeat/app/key}]'; checked app/checked"/>
+					<span tal:content="app/label">AddThis</span>
+				</label>
+			</fieldset>
+			<fieldset>
+				<legend>Website uses</legend>
+				<label tal:repeat="app privacy_applications">
+					<input type="checkbox" tal:attributes="name 'config[privacy][${repeat/app/key}]'; checked app/checked"/>
+					<span tal:content="app/label">AddThis</span>
+				</label>
+			</fieldset>
+		</div>
+
+		<div id="config-maintenance" class="section-panel">
+			<fieldset>
+				<legend i18n:translate="">Debugging</legend>
+				<label tal:repeat="option debug_options">
+					<input type="checkbox" name="config[debug][poodle_level][]" tal:attributes="value option/value; checked option/active"/>
+					<span i18n:translate="" tal:content="option/label">Memory</span>
+				</label>
+			</fieldset>
+			<fieldset>
+				<legend i18n:translate="">Maintenance mode</legend>
+				<label>
+					<input type="checkbox" name="config[site][maintenance]" tal:attributes="checked CONFIG/site/maintenance"/>
+					<span i18n:translate="">Maintenance switched on</span>
+				</label>
+				<label>
+					<span i18n:translate="">Maintenance till</span>
+					<input type="datetime" name="config[site][maintenance_till]" tal:attributes="value CONFIG/site/maintenance_till"/>
+				</label>
+				<label>
+					<span i18n:translate="">Maintenance message</span>
+					<textarea name="config[site][maintenance_text]" tal:content="CONFIG/site/maintenance_text"></textarea>
+				</label>
+			</fieldset>
+		</div>
+	</div>
+
+	<div id="main-content-foot">
+		<button i18n:translate="">Save</button>
+	</div>
+
+</form>
+</div>
+</div>

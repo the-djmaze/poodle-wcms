@@ -1,0 +1,23 @@
+
+<form action="/post-comment" method="post" tal:attributes="data-p-challenge php:Poodle\AntiSpam\Captcha::generateHidden()">
+    <div>
+        <label tal:condition="not:IDENTITY/id">
+            <span i18n:translate="">Name</span>
+            <input type="text" name="comment[author]"/>
+        </label>
+
+        <label tal:condition="not:IDENTITY/id">
+            <span i18n:translate="">Email address</span>
+            <input type="email" name="comment[email]"/>
+        </label>
+
+        <label>
+            <span i18n:translate="">Comment</span>
+            <textarea name="comment[body]"></textarea>
+        </label>
+
+        <input type="hidden" name="comment[resource_id]" tal:attributes="value RESOURCE/id"/>
+        <input type="hidden" name="comment[resource_uri]" tal:attributes="value RESOURCE/uri"/>
+        <button name="add_comment" i18n:translate="">Post</button>
+    </div>
+</form>

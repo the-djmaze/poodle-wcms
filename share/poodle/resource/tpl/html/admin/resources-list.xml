@@ -1,0 +1,25 @@
+
+<div id="main-content">
+	<div id="admin-resources">
+
+		<form method="get" action="/admin/resources/">
+			<input type="search" name="q" i18n:attributes="placeholder" placeholder="Search" tal:attributes="value SERVER/HTTP_SEARCH_QUERY"/>
+			<button i18n:translate="">Search</button>
+		</form>
+		<hr/>
+
+		<table class="sortable"><thead><tr>
+<!---		<th tal:attributes="class sortorder_fields/uri/class"><a tal:attributes="href sortorder_fields/uri/href" i18n:translate="">Path</a></th>-->
+			<th i18n:translate="">Path</th>
+			<th tal:attributes="class 'date ${sortorder_fields/ptime/class}'"><a tal:attributes="href sortorder_fields/ptime/href" i18n:translate="">Publish date</a></th>
+			<th tal:attributes="class 'date ${sortorder_fields/etime/class}'"><a tal:attributes="href sortorder_fields/etime/href" i18n:translate="">Expiry date</a></th>
+		</tr></thead><tbody>
+			<tr tal:repeat="resource resources">
+				<td tal:attributes="title resource/title"><a href="" tal:attributes="href '/admin/resources/${resource/id}'" tal:content="resource/uri">index</a></td>
+				<td tal:content="php:${resource/ptime}?context.L10N.date('DATE_T',${resource/ptime}):''"></td>
+				<td tal:content="php:${resource/etime}?context.L10N.date('DATE_T',${resource/etime}):''"></td>
+			</tr>
+		</tbody>
+		</table>
+	</div>
+</div>

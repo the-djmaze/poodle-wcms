@@ -1,0 +1,21 @@
+
+<form action="?forgot" method="post" tal:attributes="data-p-challenge php:Poodle\AntiSpam\Captcha::generateHidden()">
+	<div class="login-content">
+		<strong i18n:translate="">Forgot your passphrase?</strong>
+		<p i18n:translate="forgot passphrase info">Before you can reset your passphrase, you need to enter the information below to help identify your account.
+		We will then send you an email with a special link where you can reset your passphrase.</p>
+
+		<label>
+			<span i18n:translate="">Email address</span>
+			<input type="email" name="forgot[email]" pattern="^[^@]+@[^@]+$"/>
+		</label>
+		<span i18n:translate="">or</span>
+		<label>
+			<span i18n:translate="">Username</span>
+			<input type="text" name="forgot[auth_claimed_id]"/>
+		</label>
+	</div>
+	<div class="login-footer">
+		<button i18n:translate="">Send</button>
+	</div>
+</form>

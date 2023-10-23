@@ -1,0 +1,93 @@
+<div class="table" id="admin-resource-types">
+
+<div id="leftside" class="resizable">
+	<div id="leftside-body">
+		<ul>
+			<li><a href="#resource-type" i18n:translate="">General</a></li>
+			<li><a href="#resource-type-fields" i18n:translate="" tal:condition="edit_resource_type">Fields</a></li>
+		</ul>
+	</div>
+	<div id="leftside-foot">
+		<a href="/admin/poodle_resource_types/add" class="new" i18n:translate="">Add</a>
+	</div>
+</div>
+
+<div id="main-content">
+<form action="" method="post">
+	<div id="admin-resource-type">
+
+		<div id="resource-type">
+			<label>
+				<span i18n:translate="">ID</span>
+				<input name="resource_type[name]" type="text" tal:attributes="value resource_type/name" maxlength="32"/>
+			</label>
+
+			<label>
+				<span i18n:translate="">Label</span>
+				<input name="resource_type[label]" type="text" tal:attributes="value resource_type/label" maxlength="32"/>
+			</label>
+<!--
+			<label>
+				<span i18n:translate="">CSS Class</span>
+				<input name="resource_type[cssclass]" type="text" tal:attributes="value resource_type/cssclass" maxlength="64"/>
+			</label>
+-->
+			<label>
+				<span i18n:translate="">Resource Class</span>
+				<input name="resource_type[class]" type="text" tal:attributes="value resource_type/class" maxlength="64"/>
+			</label>
+
+			<label tal:define="layouts php:\Poodle\Resource\BodyLayouts::getList()" tal:condition="layouts">
+				<span i18n:translate="">Layout</span>
+				<select name="resource_type[bodylayout_id]">
+					<option value="0">[<span tal:omit-tag="" i18n:translate="">default</span>]</option>
+					<option tal:repeat="layout layouts" tal:attributes="selected php:${layout/id}==${resource_type/bodylayout_id}; value layout/id" tal:content="layout/name">layout name</option>
+				</select>
+			</label>
+
+			<label>
+				<input name="resource_type[flags][]" type="checkbox" value="1" tal:attributes="checked php:${resource_type/flags}&amp;1"/>
+				<span i18n:translate="">Hidden</span>
+			</label>
+			<label>
+				<input name="resource_type[flags][]" type="checkbox" value="2" tal:attributes="checked php:${resource_type/flags}&amp;2"/>
+				<span i18n:translate="">No data</span>
+			</label>
+			<label>
+				<input name="resource_type[flags][]" type="checkbox" value="4" tal:attributes="checked php:${resource_type/flags}&amp;4"/>
+				<span i18n:translate="">Resources menu</span>
+			</label>
+			<label>
+				<input name="resource_type[flags][]" type="checkbox" value="8" tal:attributes="checked php:${resource_type/flags}&amp;8"/>
+				<span i18n:translate="">Not language specific</span>
+			</label>
+		</div>
+
+		<div id="resource-type-fields" tal:condition="edit_resource_type">
+			<table><thead><tr>
+				<th i18n:translate="">ID</th>
+				<th i18n:translate="">Label</th>
+				<th i18n:translate="">Type</th>
+				<th i18n:translate="">Sortorder</th>
+			</tr></thead><tbody>
+				<tr tal:repeat="field resource_type/fields" tal:attributes="data-typefield php:json_encode(${field})">
+					<td tal:content="field/name"></td>
+					<td tal:content="field/label"></td>
+					<td tal:content="field/type_name"></td>
+					<td tal:content="field/sortorder"></td>
+				</tr>
+			</tbody>
+			</table>
+			<br/><button id="add-resource-type-field" type="button" i18n:translate="">Add</button>
+		</div>
+
+	</div>
+
+	<div id="main-content-foot">
+		<a tal:condition="resource_type/id" class="button" href="?export" i18n:translate="">Download</a>
+		<button i18n:translate="">Save</button>
+	</div>
+</form>
+</div>
+
+</div>

@@ -1,0 +1,14 @@
+@import "poodle_tree";
+
+#edit_menu button {
+	margin:2px 0 2px 4px;
+}
+#edit_menu input[name=mitem_uri] {
+	width:50%;
+}
+#edit_menu li[draggable="true"] {
+	cursor: pointer;
+}
+#edit_menu li[draggable="true"] a {
+	cursor: grab;
+}

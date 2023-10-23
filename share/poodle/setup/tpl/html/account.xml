@@ -1,0 +1,67 @@
+<fieldset class="error" tal:condition="fatal_errors">
+	<legend>Errors:</legend>
+	<ul>
+		<li tal:repeat="error fatal_errors" tal:content="error"></li>
+	</ul>
+</fieldset>
+
+<form action="" method="post" id="account">
+<fieldset><legend i18n:translate="">Account basics</legend>
+<table><tbody>
+	<tr>
+		<td><label for="user_email" i18n:translate="">Email address</label></td>
+		<td class="v"><input type="text" name="user[email]" value="" tal:attributes="value account/email" id="user_email" /></td>
+		<td class="info"></td>
+	</tr><tr>
+		<td><label for="user_nickname" i18n:translate="">Nickname</label></td>
+		<td class="v"><input type="text" name="user[nickname]" value="" tal:attributes="value account/nickname" id="user_nickname" /></td>
+		<td class="info"><i class="infobox"><span i18n:translate="Nickname_info">The nickname is used for login and to show to all visitors who you are.</span></i></td>
+	</tr><tr>
+		<td><label for="user_passphrase" i18n:translate="">Passphrase</label></td>
+		<td class="v"><input type="password" name="user[passphrase]" id="user_passphrase" /></td>
+		<td class="info"></td>
+	</tr><tr>
+		<td><label for="passphrase_confirm" i18n:translate="">Confirm passphrase</label></td>
+		<td class="v"><input type="password" name="passphrase_confirm" id="passphrase_confirm" /></td>
+		<td class="info"></td>
+	</tr>
+</tbody></table>
+</fieldset>
+
+<fieldset><legend i18n:translate="">Private details</legend>
+<table><tbody>
+	<tr>
+		<td><label for="user_givenname" i18n:translate="">Given name</label></td>
+		<td class="v"><input type="text" name="user[givenname]" value="" tal:attributes="value account/givenname" id="user_givenname" /></td>
+		<td class="info"></td>
+	</tr><tr>
+		<td><label for="user_surname" i18n:translate="">Surname</label></td>
+		<td class="v"><input type="text" name="user[surname]" value="" tal:attributes="value account/surname" id="user_surname" /></td>
+		<td class="info"></td>
+	</tr><tr>
+		<td><label for="user_language" i18n:translate="">Language</label></td>
+		<td class="v"><select name="user[language]" id="user_language">
+			<option tal:repeat="lng user_lng" value="" tal:attributes="selected lng/selected; value lng/value" tal:content="lng/title"></option>
+		</select></td>
+		<td class="info"></td>
+	</tr><tr>
+		<td><label for="user_timezone" i18n:translate="">Time zone</label></td>
+		<td class="v"><select name="user[timezone]" id="user_timezone">
+			<option value="UTC">UTC</option>
+			<xsl:for-each select="L10N/timezones">
+			<optgroup label="" tal:condition="php:is_array(${timezones})" tal:attributes="label repeat/timezones/key">
+				<xsl:for-each select="timezones">
+				<option tal:condition="repeat/timezones/key" tal:attributes="value repeat/timezones/key; selected php:${repeat/timezones/key}==${account/timezone}" tal:content="timezones"></option>
+				</xsl:for-each>
+			</optgroup>
+			</xsl:for-each>
+		</select></td>
+		<td class="info"></td>
+	</tr>
+</tbody></table></fieldset>
+
+<div id="stepbuttons">
+	<button i18n:translate="">Save</button>
+<!--	<button type="reset" i18n:translate="">Reset</button> -->
+</div>
+</form>

@@ -1,0 +1,234 @@
+<div class="table" id="admin-resource-default">
+
+<div id="leftside" class="resizable">
+	<div id="leftside-body">
+		<b i18n:translate="">General</b>
+		<ul>
+			<li><a href="#resource-content" i18n:translate="">Content</a></li>
+			<li tal:condition="RESOURCE/id"><a href="#resource-attachments" i18n:translate="">Attachments</a></li>
+		</ul>
+		<b i18n:translate="">Settings</b>
+		<ul>
+			<li><a href="#resource-general" i18n:translate="">General</a></li>
+			<li><a href="#resource-permissions" i18n:translate="">Permissions</a></li>
+			<li tal:condition="RESOURCE/revisions"><a href="#revisions" i18n:translate="">Revisions</a></li>
+		</ul>
+	</div>
+</div>
+
+<form action="" method="post" id="main-content">
+	<div id="admin-resource">
+		<div id="resource-general">
+			<div>
+				<div tal:omit-tag="" tal:condition="parent_uris">
+					<label>
+						<span i18n:translate="">Parent</span>
+						<select id="base_uri" name="resource[parent_id]">
+							<option tal:repeat="resource parent_uris" tal:attributes="selected php:${resource/id}==${RESOURCE/parent_id}; disabled resource/disabled; class resource/class; title resource/uri; value resource/id" tal:content="resource/text">[root]</option>
+						</select>
+					</label>
+
+					<label>
+						<span i18n:translate="">URI path</span>
+						<input id="resource_uri" type="text" name="resource[uri]" required="" tal:attributes="value RESOURCE/basename"/>
+						<em class="infobox"><span i18n:translate="">Resource URI path info</span></em>
+					</label>
+				</div>
+
+				<div tal:omit-tag="" tal:condition="resource_types">
+					<label tal:attributes="hidden php:2&gt;count(${resource_types})">
+						<span i18n:translate="">Type</span>
+						<select id="resource_type_id" name="resource[type_id]">
+							<option tal:repeat="type resource_types" tal:attributes="selected php:${type/id}==${RESOURCE/type_id}; value type/id" tal:content="type/label">resource type name</option>
+						</select>
+					</label>
+				</div>
+
+				<label tal:define="layouts php:\Poodle\Resource\BodyLayouts::getList()" tal:condition="layouts">
+					<span i18n:translate="">Layout</span>
+					<select id="resource_bodylayout_id" name="resource[bodylayout_id]">
+						<option value="0">[<span tal:omit-tag="" i18n:translate="">default</span>]</option>
+						<option tal:repeat="layout layouts" tal:attributes="selected php:${layout/id}==${RESOURCE/bodylayout_id}; value layout/id" tal:content="layout/name">layout name</option>
+					</select>
+				</label>
+			</div>
+
+			<div class="dates">
+				<label>
+					<span i18n:translate="">Created</span>
+					<span tal:content="php:context.L10N.date('r',${RESOURCE/ctime})"></span>
+				</label>
+				<label>
+					<span i18n:translate="">Last modified</span>
+					<span tal:content="php:context.L10N.date('r',${RESOURCE/mtime})"></span>
+				</label>
+				<div tal:omit-tag="" tal:condition="not:php:${RESOURCE/flags}&amp;4">
+					<label>
+						<span i18n:translate="">Publish date</span>
+						<input id="resource_ptime" type="datetime" name="resource[ptime]" tal:attributes="value RESOURCE/ptime"/>
+					</label>
+					<label>
+						<span i18n:translate="">Expiry date</span>
+						<input id="resource_etime" type="datetime" name="resource[etime]" tal:attributes="value RESOURCE/etime"/>
+					</label>
+				</div>
+			</div>
+
+			<div id="type-fields-general"></div>
+		</div>
+
+		<div id="resource-content">
+			<label tal:condition="RESOURCE/hasL10N">
+				<span i18n:translate="">Language</span>
+				<select id="resource_data-l10n_id" name="resource_data[l10n_id]" tal:define="inactivelanguages L10N/getInactiveList">
+					<option tal:condition="not:RESOURCE/l10n_id" value="0"></option>
+					<option tal:repeat="language L10N/getActiveList" tal:attributes="value language/id; selected php:${language/id}==${RESOURCE/l10n_id}" tal:content="language/label">English</option>
+					<optgroup label="inactive" i18n:attributes="label" tal:condition="inactivelanguages">
+						<option tal:repeat="language inactivelanguages" tal:attributes="value language/id; selected php:${language/id}==${RESOURCE/l10n_id}" tal:content="language/label">English</option>
+					</optgroup>
+				</select>
+			</label>
+
+			<div id="resource_data">
+				<label id="resource_data-title">
+					<span i18n:translate="">Title</span>
+					<input type="text" name="resource_data[title]" required="" tal:attributes="value RESOURCE/title" maxlength="160"/>
+				</label>
+
+				<label id="resource_data-body">
+					<span i18n:translate="">Content</span>
+					<textarea name="resource_data[body]" class="body wysiwyg" tal:content="RESOURCE/body"></textarea>
+				</label>
+
+				<label id="resource_data-status">
+					<span i18n:translate="">Status</span>
+					<select name="resource_data[status]">
+						<option value="2" tal:attributes="selected php:2==${RESOURCE/status}" i18n:translate="">published</option>
+						<option value="1" tal:attributes="selected php:1==${RESOURCE/status}" i18n:translate="">pending</option>
+						<option value="0" tal:attributes="selected php:0==${RESOURCE/status}" i18n:translate="">draft</option>
+						<option value="-1" tal:attributes="selected php:-1==${RESOURCE/status}" i18n:translate="">removed</option>
+					</select>
+				</label>
+
+				<label id="resource_data-searchable">
+					<input type="checkbox" name="resource_data[searchable]" tal:attributes="checked RESOURCE/searchable"/>
+					<span i18n:translate="">Allow search</span>
+				</label>
+			</div>
+
+			<div id="type-fields-content"></div>
+		</div>
+
+		<div id="resource-attachments">
+			<table><thead>
+				<tr>
+					<th style="width:16px"></th>
+					<th tal:condition="RESOURCE/attachments/getTypesGrouped" i18n:translate="">type</th>
+					<th i18n:translate="">language</th>
+					<th i18n:translate="">file</th>
+				</tr>
+			</thead><tbody>
+				<tr tal:repeat="attachment RESOURCE/attachments">
+					<td><input type="checkbox" name="attachments[]" tal:attributes="value attachment/id"/></td>
+					<td tal:condition="RESOURCE/attachments/getTypesGrouped" tal:content="attachment/type"></td>
+					<td tal:content="attachment/language"></td>
+					<td>
+						<a tal:condition="php:'image'==${attachment/media/getFileInfo/getMimeRoot}"
+							tal:attributes="href attachment/media/getAdminURI">
+							<img tal:attributes="src attachment/media/getURI" style="height:48px" alt=""/>
+						</a>
+						<a tal:condition="not:php:'image'==${attachment/media/getFileInfo/getMimeRoot}" tal:attributes="href attachment/uri" tal:content="attachment/file"></a>
+					</td>
+				</tr>
+			</tbody><tfoot>
+				<tr>
+					<td></td>
+					<td tal:condition="RESOURCE/attachments/getTypesGrouped"><select name="attachment_type_id">
+						<option value="0">-</option>
+						<optgroup label="" tal:repeat="group RESOURCE/attachments/getTypesGrouped" tal:attributes="label group/label">
+							<option tal:repeat="type group/types" tal:attributes="value type/id; data-width type/width; data-height type/height" tal:content="type/label">type 0</option>
+						</optgroup>
+					</select></td>
+					<td><select name="attachment_l10n_id" tal:define="inactivelanguages L10N/getInactiveList">
+						<option value="0">-</option>
+						<option tal:repeat="language L10N/getActiveList" tal:attributes="value language/id" tal:content="language/label">English</option>
+						<optgroup label="inactive" i18n:attributes="label" tal:condition="inactivelanguages">
+							<option tal:repeat="language inactivelanguages" tal:attributes="value language/id" tal:content="language/label">English</option>
+						</optgroup>
+					</select></td>
+					<td>
+						<span i18n:translate="">Media</span>
+						<input type="text" id="attachment_media_item" name="attachment_media_item"/>
+						<br/>
+						<span i18n:translate="">Upload</span>
+						<input type="file" name="resource_attachment"/>
+						<br/>
+						<input type="hidden" name="attachment_crop[x]"/>
+						<input type="hidden" name="attachment_crop[y]"/>
+						<input type="hidden" name="attachment_crop[w]"/>
+						<input type="hidden" name="attachment_crop[h]"/>
+						<button formenctype="multipart/form-data" i18n:translate="">Add</button>
+					</td>
+				</tr>
+			</tfoot></table>
+			<button name="remove_selected_attachments" i18n:translate="">Remove selected</button>
+			<div style="text-align:right">
+				<img id="image-preview" alt="" src=""/>
+			</div>
+		</div>
+
+		<div id="resource-permissions">
+			<table id="acl_groups"><thead>
+				<tr>
+					<th i18n:translate="">Group</th>
+					<th tal:repeat="action acl_actions" tal:content="L10N/${action}">action</th>
+				</tr>
+			</thead><tbody>
+				<tr tal:repeat="group RESOURCE/groups_perms">
+					<td tal:attributes="class php:${group/parent_id}?'child':null">
+						<label tal:attributes="for 'acl_group_${group/id}'">
+							<input type="checkbox" id="acl_group_0" name="acl[0][]" value="0" tal:attributes="checked group/active; id 'acl_group_${group/id}'; name 'acl[${group/id}][]'"/>
+							<span tal:content="group/name">group name</span>
+						</label>
+					</td>
+					<td tal:repeat="action group/actions">
+						<input type="checkbox" name="acl[0][]" value="1" tal:attributes="checked action/active; disabled not:group/active; name 'acl[${group/id}][]'; value action/id"/>
+					</td>
+				</tr>
+			</tbody></table>
+		</div>
+
+		<div id="revisions" tal:condition="RESOURCE/revisions">
+			<table>
+				<thead><tr>
+					<th i18n:translate="">Author</th>
+					<th i18n:translate="">Date</th>
+					<th i18n:translate="">Status</th>
+					<th i18n:translate="">Rollback</th>
+					<th i18n:translate="">Options</th>
+				</tr></thead>
+				<tbody tal:repeat="revgroup RESOURCE/revisions">
+					<tr><th colspan="4" tal:content="revgroup/label"></th></tr>
+					<tr tal:repeat="rev revgroup/items">
+						<td tal:content="rev/author"></td>
+						<td tal:content="php:context.L10N.date('DATE_T',${rev/mtime})"></td>
+						<td tal:content="rev/status_label"></td>
+						<td tal:content="php:${rev/rollback_of}?context.L10N.date('DATE_T',${rev/rollback_of}):''"></td>
+						<td><div tal:condition="php:0&lt;${repeat/rev/index}">
+							<a tal:attributes="href '?revision=${rev/mtime}&amp;l10n=${rev/l10n_id}'" i18n:translate="">view</a>
+							|
+							<a tal:attributes="href '?rollback=${rev/mtime}&amp;l10n=${rev/l10n_id}'" i18n:translate="">rollback</a>
+						</div></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<div id="main-content-foot">
+		<a class="button" tal:attributes="href RESOURCE/uri" target="_blank" i18n:translate="" style="margin-right:1em">Show</a>
+		<button i18n:translate="">Save</button>
+	</div>
+</form>
+
+</div>

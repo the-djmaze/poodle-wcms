@@ -1,0 +1,24 @@
+
+<div id="leftside" class="resizable">
+<ul class="tree" id="media_tree">
+	<li tal:attributes="class media_tree_root_class" tal:content="media_tree_title">Media</li>
+	<li tal:repeat="dir media_dirs" class="unfolds">
+		<a tal:attributes="href php:\Poodle\Media::getFileUri(${dir}); class dir/getCSSClass" i18n:translate="" tal:content="dir/getFilename">index</a>
+	</li>
+</ul>
+</div>
+
+<div id="main-content">
+	<form action="" method="post" enctype="multipart/form-data" id="media-upload" tal:condition="IDENTITY/ACL/create"><div>
+		<span i18n:translate="">Add file</span>
+		<input id="media-upload-file" type="file" name="media_file" i18n:attributes="title 'Browse'"/>
+		<input id="media-upload-dir" type="hidden" name="media_dir"/>
+		<button type="submit" name="upload">+</button>
+	</div></form>
+
+	<ul class="media-files mime-64">
+		<li tal:repeat="file media_files" tal:attributes="class file/getCSSClass; title file/getBasename">
+			<span tal:content="file/getNameWithoutExtension">ad-servers</span>
+		</li>
+	</ul>
+</div>

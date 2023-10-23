@@ -1,0 +1,18 @@
+@import "poodle_wysiwyg";
+
+.wysiwyg .toolbars a.insert-table,
+.wysiwyg .toolbars a.insert-tr-above,
+.wysiwyg .toolbars a.insert-tr-below,
+.wysiwyg .toolbars a.delete-tr,
+.wysiwyg .toolbars a.insert-td-before,
+.wysiwyg .toolbars a.insert-td-after,
+.wysiwyg .toolbars a.delete-td
+{
+	background: transparent url(../images/wysiwyg-tables.png) no-repeat 0 0;
+}
+.wysiwyg .toolbars a.insert-tr-above  { background-position: -48px 0 }
+.wysiwyg .toolbars a.insert-tr-below  { background-position: -24px 0 }
+.wysiwyg .toolbars a.delete-tr        { background-position: -72px 0 }
+.wysiwyg .toolbars a.insert-td-before { background-position: -48px -24px }
+.wysiwyg .toolbars a.insert-td-after  { background-position: -24px -24px }
+.wysiwyg .toolbars a.delete-td        { background-position: -72px -24px }

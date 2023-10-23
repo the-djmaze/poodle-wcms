@@ -1,0 +1,34 @@
+<div class="table" id="admin-l10n">
+
+<div id="leftside">
+	<div id="leftside-body">
+		<a href="/admin/poodle_l10n/" i18n:translate="">Settings</a>
+		<a href="/admin/poodle_l10n/translate/" i18n:translate="">Translate</a>
+	</div>
+</div>
+
+<div id="main-content">
+	<form action="" method="post">
+	<div id="l10n-settings">
+		<table><thead>
+		<tr>
+			<th i18n:translate="">Language</th>
+			<th i18n:translate="">Active</th>
+			<th i18n:translate="">Default</th>
+		</tr>
+		</thead><tbody>
+		<tr tal:repeat="lang languages">
+			<td tal:content="lang/label"></td>
+			<td style="text-align:center"><input type="checkbox" name="l10n[active][]" value="" tal:attributes="value lang/id; checked lang/active"/></td>
+			<td style="text-align:center"><input type="radio" name="l10n[default]" value="" tal:attributes="value lang/bcp47; checked lang/default"/></td>
+		</tr>
+		</tbody>
+		</table>
+	</div>
+	<div id="main-content-foot">
+		<button i18n:translate="">Save</button>
+	</div>
+	</form>
+
+</div>
+</div>

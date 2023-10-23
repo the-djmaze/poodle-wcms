@@ -1,0 +1,141 @@
+<div class="table" id="admin-resource-default">
+
+<div id="leftside" class="resizable">
+	<div id="leftside-body">
+		<a href="#resource-content" i18n:translate="">New</a>
+	</div>
+</div>
+
+<div id="main-content">
+<form action="" method="post">
+	<div id="admin-resource">
+		<div id="resource-content">
+
+			<label tal:condition="parent_uris">
+				<span i18n:translate="">Parent</span>
+				<select id="base_uri" name="resource[parent_id]">
+					<option tal:repeat="resource parent_uris" tal:attributes="selected php:${resource/id}==${RESOURCE/parent_id}; disabled resource/disabled; class resource/class; title resource/uri; value resource/id" tal:content="resource/text">[root]</option>
+				</select>
+			</label>
+
+			<label tal:condition="php:!isset($_GET['type']) and !empty(${resource_types})" tal:attributes="hidden php:2&gt;count(${resource_types})">
+				<span i18n:translate="">Type</span>
+				<select id="resource_type_id" name="resource[type_id]">
+					<option tal:repeat="type resource_types" tal:attributes="selected php:${type/id}==${RESOURCE/type_id}; value type/id" tal:content="type/label">resource type name</option>
+				</select>
+			</label>
+
+			<div id="resource_data">
+				<label>
+					<span i18n:translate="" tal:condition="RESOURCE/hasL10N">Language</span>
+					<select name="resource_data[l10n_id]" tal:define="inactivelanguages L10N/getInactiveList">
+						<option tal:repeat="language L10N/getActiveList" tal:attributes="value language/id; selected php:${language/id}==${RESOURCE/l10n_id}" tal:content="language/label">English</option>
+						<optgroup label="inactive" i18n:attributes="label" tal:condition="inactivelanguages">
+							<option tal:repeat="language inactivelanguages" tal:attributes="value language/id; selected php:${language/id}==${RESOURCE/l10n_id}" tal:content="language/label">English</option>
+						</optgroup>
+					</select>
+				</label>
+
+				<label id="resource_data-title">
+					<span i18n:translate="">Title</span>
+					<input type="text" name="resource_data[title]" required="" tal:attributes="value RESOURCE/title" maxlength="160"/>
+				</label>
+
+				<label id="resource_data-body">
+					<span i18n:translate="">Content</span>
+					<textarea name="resource_data[body]" class="body wysiwyg" tal:content="RESOURCE/body"></textarea>
+				</label>
+			</div>
+
+			<div id="resource-advanced">
+				<a i18n:translate="">Advanced</a>
+				<div id="resource-advanced-data">
+					<label>
+						<span i18n:translate="">Created</span>
+						<span tal:content="php:date('r',${RESOURCE/ctime})"></span>
+					</label>
+					<label>
+						<span i18n:translate="">Last modified</span>
+						<span tal:content="php:context.L10N.date('r',${RESOURCE/mtime})"></span>
+					</label>
+					<div tal:omit-tag="" tal:condition="not:php:${RESOURCE/flags}&amp;4">
+						<label>
+							<span i18n:translate="">Publish date</span>
+							<input id="resource_ptime" type="datetime" name="resource[ptime]" tal:attributes="value RESOURCE/ptime"/>
+						</label>
+						<label>
+							<span i18n:translate="">Expiry date</span>
+							<input id="resource_etime" type="datetime" name="resource[etime]" tal:attributes="value RESOURCE/etime"/>
+						</label>
+					</div>
+
+					<label tal:condition="php:isset($_GET['type']) and !empty(${resource_types})" tal:attributes="hidden php:2&gt;count(${resource_types})">
+						<span i18n:translate="">Type</span>
+						<select id="resource_type_id" name="resource[type_id]">
+							<option tal:repeat="type resource_types" tal:attributes="selected php:${type/id}==${RESOURCE/type_id}; value type/id" tal:content="type/label">resource type name</option>
+						</select>
+					</label>
+
+					<label tal:define="layouts php:\Poodle\Resource\BodyLayouts::getList()" tal:condition="layouts">
+						<span i18n:translate="">Layout</span>
+						<select id="resource_bodylayout_id" name="resource[bodylayout_id]">
+							<option value="0">[<span tal:omit-tag="" i18n:translate="">default</span>]</option>
+							<option tal:repeat="layout layouts" tal:attributes="selected php:${layout/id}==${RESOURCE/bodylayout_id}; value layout/id" tal:content="layout/name">layout name</option>
+						</select>
+					</label>
+
+					<label tal:condition="parent_uris">
+						<span i18n:translate="">URI path</span>
+						<input id="resource_uri" type="text" name="resource[uri]" tal:attributes="value RESOURCE/basename"/>
+						<em class="infobox"><span i18n:translate="">Resource URI path info</span></em>
+					</label>
+
+					<label>
+						<span i18n:translate="">Status</span>
+						<select id="resource_data-status" name="resource_data[status]">
+							<option value="2" i18n:translate="">published</option>
+							<option value="1" i18n:translate="">pending</option>
+							<option value="0" i18n:translate="">draft</option>
+						</select>
+					</label>
+
+					<label id="resource_data-searchable">
+						<input type="checkbox" name="resource_data[searchable]" tal:attributes="checked RESOURCE/searchable"/>
+						<span i18n:translate="">Allow search</span>
+					</label>
+
+					<div id="type-fields-content"></div>
+					<div id="type-fields-general"></div>
+				</div>
+
+				<div id="resource-permissions">
+					<table id="acl_groups"><thead>
+						<tr>
+							<th i18n:translate="">Group</th>
+							<th tal:repeat="action acl_actions" tal:content="L10N/${action}">action</th>
+						</tr>
+					</thead><tbody>
+						<tr tal:repeat="group RESOURCE/groups_perms">
+							<td tal:attributes="class php:${group/parent_id}?'child':null">
+								<label tal:attributes="for 'acl_group_${group/id}'">
+									<input type="checkbox" id="acl_group_0" name="acl[0][]" value="0" tal:attributes="checked group/active; id 'acl_group_${group/id}'; name 'acl[${group/id}][]'"/>
+									<span tal:content="group/name">group name</span>
+								</label>
+							</td>
+							<td tal:repeat="action group/actions">
+								<input type="checkbox" name="acl[0][]" value="1" tal:attributes="checked action/active; disabled not:group/active; name 'acl[${group/id}][]'; value action/id"/>
+							</td>
+						</tr>
+					</tbody></table>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="main-content-foot">
+		<button i18n:translate="">Save</button>
+	</div>
+</form>
+</div>
+
+</div>

@@ -1,0 +1,40 @@
+<div class="table" id="admin-menu">
+
+<div id="leftside">
+	<div id="leftside-body">
+		<a tal:repeat="menu menus" tal:attributes="href '/admin/poodle_menu/${menu/id}/'" tal:content="menu/name"></a>
+	</div>
+</div>
+
+
+<div id="main-content">
+	<div>
+		<ul class="tree" id="edit_menu">
+			<li class="root" tal:content="edit_menu/name">Menu name</li>
+
+			<li tal:repeat="item edit_menu/items" tal:attributes="class php:${item/hasChildren}?'unfolds':null; data-mitem-id item/id; data-mitem-uri item/uri; title item/uri">
+				<a tal:content="item/label">Site</a>
+				<ul>
+					<li tal:repeat="item item/children" tal:attributes="class php:${item/hasChildren}?'unfolds':null; data-mitem-id item/id; data-mitem-uri item/uri; title item/uri">
+						<a tal:content="item/label">Site</a>
+						<ul>
+							<li tal:repeat="item item/children" tal:attributes="class php:${item/hasChildren}?'unfolds':null; data-mitem-id item/id; data-mitem-uri item/uri; title item/uri">
+								<a tal:content="item/label">Site</a>
+								<ul>
+									<li tal:repeat="item item/children" tal:attributes="class php:${item/hasChildren}?'unfolds':null; data-mitem-id item/id; data-mitem-uri item/uri; title item/uri">
+										<a tal:content="item/label">Site</a>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</li>
+		</ul>
+		<datalist id="resource_uris">
+			<option tal:repeat="uri resource_uris" tal:attributes="value uri/uri"/>
+		</datalist>
+	</div>
+</div>
+
+</div>

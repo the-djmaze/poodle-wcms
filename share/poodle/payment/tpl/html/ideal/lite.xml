@@ -1,0 +1,23 @@
+
+<form tal:attributes="action iDEAL/urlAcquirer" method="post">
+<div>
+	<input type="hidden" name="merchantID" tal:attributes="value iDEAL/merchantId"/>
+	<input type="hidden" name="subID" tal:attributes="value iDEAL/merchantSubId"/>
+	<input type="hidden" name="amount" tal:attributes="value iDEAL/orderAmount"/>
+	<input type="hidden" name="purchaseID" tal:attributes="value iDEAL/orderId"/>
+	<input type="hidden" name="language" tal:attributes="value languageCode"/>
+	<input type="hidden" name="currency" value="EUR"/>
+	<input type="hidden" name="description" tal:attributes="value iDEAL/orderDescription"/>
+	<input type="hidden" name="hash" tal:attributes="value hash"/>
+	<input type="hidden" name="paymentType" tal:attributes="value paymentType"/>
+	<input type="hidden" name="validUntil" tal:attributes="value validUntil"/>
+	<input type="hidden" name="itemNumber1" value="1"/>
+	<input type="hidden" name="itemDescription1" tal:attributes="value iDEAL/orderDescription"/>
+	<input type="hidden" name="itemQuantity1" value="1"/>
+	<input type="hidden" name="itemPrice1" tal:attributes="value iDEAL/orderAmount"/>
+	<input type="hidden" name="urlCancel" tal:attributes="value iDEAL/urlCancel" tal:condition="iDEAL/urlCancel"/>
+	<input type="hidden" name="urlSuccess" tal:attributes="value iDEAL/urlSuccess" tal:condition="iDEAL/urlSuccess"/>
+	<input type="hidden" name="urlError" tal:attributes="value iDEAL/urlError" tal:condition="iDEAL/urlError"/>
+	<button class="ideal" tal:content="iDEAL/buttonLabel"></button>
+</div>
+</form>

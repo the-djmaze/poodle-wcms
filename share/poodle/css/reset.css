@@ -1,0 +1,169 @@
+/**
+	Poodle WCMS, Copyright (c) MH X Solutions since 2010. All rights reserved.
+
+	Also: http://meyerweb.com/eric/tools/css/reset/
+*/
+html {overflow:auto;}/*IE*/
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center, dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+/* HTML5 http://www.w3.org/TR/html5-diff/#new-elements */
+article, aside, audio, canvas, datalist, details, figcaption, figure, footer, header,
+hgroup, keygen, main, mark, menu, meter, nav, output, progress, section, time, video
+{
+	background: transparent;
+	border: 0;
+	font-size: 100%;
+	margin: 0;
+	outline: 0; /* anchor accessibility issue */
+	padding: 0;
+	resize: none; /* Chrome: inline-block are resizable by default */
+	vertical-align: baseline;
+}
+button, input, select, option, textarea {
+	box-sizing: border-box;
+	font-size: 100%;
+	margin: 0;
+	outline: 0;
+	padding: 0;
+}
+button,
+input[type="button"],
+input[type="reset"],
+input[type="submit"] {
+	overflow: visible; /* IE uses hidden by default and therefore hides ::before */
+}
+body { line-height: 1.2; }
+ol, ul { list-style: none; }
+blockquote, q { quotes: none; }
+blockquote::before, blockquote::after, q::before, q::after { content: ''; content: normal; }
+/* remember to define focus styles! */
+:focus { outline: 0; }
+/* remember to highlight inserts somehow! */
+ins { text-decoration: none; }
+del { text-decoration: line-through; }
+/* tables still need 'cellspacing="0"' in the markup */
+/* table { border-collapse: collapse; border-spacing: 0; } */
+fieldset, table { border-spacing: 0; }
+
+/* Declaring HTML5 elements */
+article,aside,canvas,details,figcaption,figure,footer,header,hgroup,main,menu,nav,section,summary
+{
+	display: block;
+}
+
+/* datalist select should always be invisible */
+datalist select { display:none; }
+
+/* clear floating elements */
+.clear { clear: both; }
+/* align
+.txt-l { text-align:left; }
+.txt-r { text-align:right; }
+.txt-c { text-align:center; }
+.txt-j { text-align:justify; }
+*/
+.e-resize { cursor:e-resize; }
+.s-resize { cursor:s-resize; }
+.w-resize { cursor:w-resize; }
+.se-resize { cursor:se-resize; }
+.sw-resize { cursor:sw-resize; }
+
+template, [hidden] { display:none !important; }
+.invisible { visibility:hidden !important; }
+.transparent { opacity: 0; }
+
+/* indicate that an element can be grabbed to be moved */
+.grab, *[draggable="true"] {
+	user-select: none;
+	-khtml-user-drag: element;
+	-webkit-user-drag: element;
+	cursor:hand;
+	cursor:grab;
+	cursor:-moz-grab;
+	cursor:-webkit-grab;
+}
+/* indicate that an element is actually being grabbed,
+ * is actually being moved and repositioned in drag-and-drop DHTML snippet
+ */
+.grabbing,
+body.grabbing * {
+	cursor:grabbing !important;
+	cursor:-moz-grabbing !important;
+	cursor:-webkit-grabbing !important;
+}
+body.drag * {
+	cursor:drag !important;
+}
+body.drop * {
+	cursor:drop !important;
+}
+body.copy * {
+	cursor:copy !important;
+}
+body.no-drop * {
+	cursor:no-drop !important;
+}
+
+/* webkit doesn't use an initial value of: 0 */
+ul, menu, dir {
+	-webkit-margin-before:0;
+	-webkit-margin-after:0;
+	-webkit-padding-start:0;
+}
+
+/*
+ * HTML5.1 dialog (with javascript fallback)
+ */
+dialog:not([open]) {
+	display: none;
+}
+
+.dialog {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+}
+.dialog.modal {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	text-align: center;
+	z-index: 2147483647;
+}
+.dialog.modal,
+dialog::backdrop {
+	background-color: rgba(0,0,0,0.8);
+}
+.dialog::before {
+	display: inline-block;
+	vertical-align: middle;
+	content: " ";
+	height: 100%;
+}
+.dialog > * {
+	background: #fff;
+	border: 1px solid #000;
+	border-radius: 10px;
+	display: inline-block;
+	margin-left: -50%;
+	margin-top: -50%;
+	padding: 1em;
+	text-align: left;
+	vertical-align: middle;
+}
+.dialog.modal > * {
+	margin: 50vh auto;
+	transform: translate(0, -50%);
+}
+
+input {
+	min-height: 24px; /* due to type=number spinners */
+}

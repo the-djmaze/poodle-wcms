@@ -1,0 +1,69 @@
+
+<form action="" method="post">
+<!--
+<fieldset><legend i18n:translate="">Base</legend>
+<table><tbody>
+	<tr>
+		<td><label for="config_index" i18n:translate="">Index file</label></td>
+		<td class="v"><select name="config[index]" id="config_index">
+			<option tal:repeat="item index_files" tal:attributes="value item/value; selected item/selected" tal:content="item/text">index.php</option>
+		</select></td>
+		<td class="info"><i class="infobox"><span i18n:translate="Index_file_info">Index_file_info</span></i></td>
+	</tr><tr>
+		<td><label for="config_dir_admin" i18n:translate="">Administration directory</label></td>
+		<td class="v"><select name="config[dir_admin]" id="config_dir_admin">
+			<option tal:repeat="item admin_dirs" tal:attributes="value item/value; selected item/selected" tal:content="item/text">admin</option>
+		</select></td>
+		<td class="info"><i class="infobox"><span i18n:translate="Admin_directory_info">Admin_directory_info</span></i></td>
+	</tr>
+</tbody></table>
+</fieldset>
+
+<select>
+	<option value="UTC">UTC</option>
+	<xsl:for-each select="L10N/timezones">
+	<optgroup label="" tal:condition="php:is_array(${timezones})" tal:attributes="label repeat/timezones/key">
+		<xsl:for-each select="timezones">
+		<option tal:condition="repeat/timezones/key" tal:attributes="value repeat/timezones/key" tal:content="timezones"></option>
+		</xsl:for-each>
+	</optgroup>
+	</xsl:for-each>
+</select>
+-->
+<fieldset><legend i18n:translate="">Database</legend>
+<div class="error" tal:condition="DBMS_ERROR" tal:content="DBMS_ERROR">A error occured</div>
+<table><tbody>
+	<tr>
+		<td><label for="config_dbms_adapter" i18n:translate="">Layer</label></td>
+		<td class="v"><select name="config[dbms][adapter]" id="config_dbms_adapter">
+			<option tal:repeat="item dbms_types" tal:attributes="value item/value; selected item/selected" tal:content="item/text">admin</option>
+		</select></td>
+		<td class="info"><i class="infobox"><span i18n:translate="Layer_info">Layer_info</span></i></td>
+	</tr><tr>
+		<td><label for="config_dbms_master_host" i18n:translate="">Host</label></td>
+		<td class="v"><input type="text" name="config[dbms][master][host]" tal:attributes="value base_config/dbms/master/host" id="config_dbms_master_host"/></td>
+		<td class="info"><i class="infobox"><span i18n:translate="Host_info">Host_info</span></i></td>
+	</tr><tr>
+		<td><label for="config_dbms_master_username" i18n:translate="">Username</label></td>
+		<td class="v"><input type="text" name="config[dbms][master][username]" tal:attributes="value base_config/dbms/master/username" id="config_dbms_master_username"/></td>
+		<td class="info"><i class="infobox"><span i18n:translate="Username_info">Username_info</span></i></td>
+	</tr><tr>
+		<td><label for="config_db_pass" i18n:translate="">Passphrase</label></td>
+		<td class="v"><input type="password" name="config[dbms][master][password]" tal:attributes="value base_config/dbms/master/password" id="config_db_pass"/></td>
+		<td class="info"><i class="infobox"><span i18n:translate="Passphrase_info">Passphrase_info</span></i></td>
+	</tr><tr>
+		<td><label for="config_dbms_master_database" i18n:translate="">Databasename</label></td>
+		<td class="v"><input type="text" name="config[dbms][master][database]" tal:attributes="value base_config/dbms/master/database" id="config_dbms_master_database"/></td>
+		<td class="info"><i class="infobox"><span i18n:translate="Databasename_info">Databasename_info</span></i></td>
+	</tr><tr>
+		<td><label for="config_dbms_tbl_prefix" i18n:translate="">Table Prefix</label></td>
+		<td class="v"><input type="text" name="config[dbms][tbl_prefix]" tal:attributes="value base_config/dbms/tbl_prefix" id="config_dbms_tbl_prefix" maxlength="10"/></td>
+		<td class="info"><i class="infobox"><span i18n:translate="Table_Prefix_info">Table_Prefix_info</span></i></td>
+	</tr>
+</tbody></table>
+</fieldset>
+
+<div id="stepbuttons">
+	<button i18n:translate="">Save</button>
+</div>
+</form>

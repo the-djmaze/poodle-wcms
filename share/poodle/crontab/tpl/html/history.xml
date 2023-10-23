@@ -1,0 +1,30 @@
+
+<div id="main-content">
+	<div>
+		<h1 i18n:translate="">Cron job history</h1>
+		<table><thead><tr>
+				<th i18n:translate="">Time</th>
+				<th i18n:translate="">Error</th>
+		</tr></thead><tbody>
+			<tr tal:repeat="entry crontab_history">
+				<td><time tal:condition="entry/time" tal:attributes="datetime entry/time" tal:content="php:context.L10N.date('DATE_L',${entry/time})"></time></td>
+				<td style="white-space: pre" tal:content="entry/error"></td>
+			</tr>
+		</tbody>
+		<tfoot tal:condition="crontab_pagination/items">
+			<tr><td colspan="0" class="pagination">
+				<a class="prev" tal:attributes="href crontab_pagination/prev" tal:condition="crontab_pagination/prev">◀</a>
+				<span>
+					<a class="current" tal:content="crontab_pagination/current"></a>
+					<span class="up">
+						<a tal:repeat="item crontab_pagination/allItems" tal:attributes="href item/uri; class php:${item/uri}?null:'current'" tal:content="item/page"></a>
+					</span>
+					/ <a tal:content="crontab_pagination/count"></a>
+				</span>
+				<a class="next" tal:attributes="href crontab_pagination/next" tal:condition="crontab_pagination/next">▶</a>
+			</td></tr>
+		</tfoot>
+		</table>
+		<a href="?clear" i18n:translate="">Clear</a>
+	</div>
+</div>

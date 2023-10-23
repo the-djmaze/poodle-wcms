@@ -1,0 +1,35 @@
+
+#identity-groups fieldset {
+	float: left;
+	width: 30%;
+}
+
+#identity-groups legend {
+	padding: 0 4px 2px;
+}
+#identity-groups label {
+	margin:4px;
+}
+#identity-groups fieldset > label {
+	padding-left:16px;
+}
+
+#admin-identities form.filter { margin-bottom: 1em; }
+
+#admin-identities form.filter .input-checkbox {
+	margin-top: 2px;
+}
+
+#admin-identities form.filter > * {
+	margin-right:4px;
+}
+
+#identity-auth em {
+	display: block;
+	margin-left: 2em;
+	font-family: "Liberation Mono", FreeMono, "Courier New", FreeMono, Courier, monospace;
+	font-style: normal;
+	letter-spacing: 0em;
+	line-height: 1em;
+	white-space: pre-wrap;
+}

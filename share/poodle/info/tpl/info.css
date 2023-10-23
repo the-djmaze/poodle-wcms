@@ -1,0 +1,10 @@
+.check-ok .status   { color:#0A0; }
+.check-fail .status { color:#D00; }
+.check-ok .status, .check-fail .status {
+	background: url(../images/16x16/no.png) no-repeat center center;
+	text-indent:-700em;
+}
+.check-ok .status { background-image: url(../images/16x16/yes.png); }
+
+#system-check td + td { width: 2em; }
+#system-check td + td + td { width: 1em; }

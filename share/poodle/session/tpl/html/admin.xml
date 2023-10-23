@@ -1,0 +1,63 @@
+
+<form action="" method="post">
+<table><tbody>
+	<tr>
+		<td i18n:translate="">Handler</td>
+		<td><input name="session[handler]" type="text" tal:attributes="value CONFIG/session/handler"/></td>
+	</tr>
+	<tr>
+		<td i18n:translate="">Name</td>
+		<td><input name="session[name]" type="text" tal:attributes="value CONFIG/session/name"/></td>
+	</tr>
+	<tr>
+		<td i18n:translate="">Time-out</td>
+		<td><input name="session[timeout]" type="number" min="20" step="1" style="width:6em" tal:attributes="value CONFIG/session/timeout"/> minutes</td>
+	</tr>
+	<tr>
+		<td i18n:translate="">Serializer</td>
+		<td><select name="session[serializer]">
+			<option tal:repeat="serializer session_serializers" tal:attributes="selected serializer/current" tal:content="serializer/name">php</option>
+		</select>
+		</td>
+	</tr>
+	<tr>
+		<td i18n:translate="">Path</td>
+		<td><input name="session[save_path]" tal:attributes="value CONFIG/session/save_path; placeholder session_save_path"/></td>
+	</tr>
+	<tr>
+		<td i18n:translate="">Cookie</td>
+		<td><select name="session[samesite]">
+			<option value="Strict">Strict</option>
+			<option value="Lax" tal:attributes="selected php:'Lax' == ${CONFIG/session/samesite}">Lax</option>
+		</select>
+		</td>
+	</tr>
+</tbody><tfoot>
+	<tr>
+		<td></td>
+		<td><button name="save" i18n:translate="">Save</button></td>
+	</tr>
+</tfoot>
+</table>
+
+<table>
+<thead><tr>
+	<td i18n:translate="">Username</td>
+	<td>IP</td>
+	<td>URI</td>
+	<td i18n:translate="">User agent</td>
+	<td i18n:translate="">Expires</td>
+	<td i18n:translate="">Options</td>
+</tr></thead>
+<tbody>
+	<tr tal:repeat="session sessions_list">
+		<td tal:content="session/user_nickname"></td>
+		<td tal:content="session/sess_ip"></td>
+		<td tal:content="session/sess_uri"></td>
+		<td tal:content="session/sess_user_agent"></td>
+		<td tal:content="php:date('Y-m-d H:i:s', ${session/sess_expiry})"></td>
+		<td><button tal:attributes="name 'delete[${session/sess_id}]'">Delete</button></td>
+	</tr>
+</tbody>
+</table>
+</form>

@@ -1,0 +1,40 @@
+<div class="table" id="admin-resources">
+
+<div id="leftside" class="resizable">
+	<div id="leftside-body">
+		<ul>
+			<li tal:repeat="type resource_types"><a tal:attributes="href '/admin/poodle_resource_types/${type/id}'" tal:content="type/label"></a></li>
+		</ul>
+	</div>
+	<div id="leftside-foot">
+		<a href="/admin/poodle_resource_types/add" class="new" i18n:translate="">Add</a>
+	</div>
+</div>
+
+<div id="main-content">
+	<div>
+		<table><thead><tr>
+			<th i18n:translate="">Label</th>
+			<th i18n:translate="">Resource Class</th>
+			<th i18n:translate="">Layout</th>
+		</tr></thead><tbody>
+			<tr tal:repeat="type resource_types">
+				<td><a tal:attributes="href '/admin/poodle_resource_types/${type/id}'" tal:content="type/label">[default]</a></td>
+				<td tal:content="type/class"></td>
+				<td tal:content="php:\Poodle\Resource\BodyLayouts::getLayoutName(${type/bodylayout_id})"></td>
+			</tr>
+		</tbody>
+		</table>
+
+		<hr/>
+		<form action="" method="post" enctype="multipart/form-data">
+			<div>
+				<!--<input name="resource_xml" type="file" accept="audio/*,video/*,image/*,application/*,text/*,.xml"/>-->
+				<input name="resourcetype_xml" type="file" accept="application/xml"/>
+				<button i18n:translate="">Upload</button>
+			</div>
+		</form>
+	</div>
+</div>
+
+</div>

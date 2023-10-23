@@ -1,0 +1,141 @@
+<div class="table" id="admin-identities">
+
+<div id="leftside">
+	<div id="leftside-body">
+		<a href="#settings" i18n:translate="">Settings</a>
+		<a href="#cookie" i18n:translate="">Cookie</a>
+		<a tal:repeat="provider auth_providers" tal:attributes="href '#${provider/uid}'" tal:content="provider/name"></a>
+	</div>
+</div>
+
+<div id="main-content">
+	<form action="" method="post">
+
+	<div class="section-panel" id="settings">
+		<label>
+			<span i18n:translate="">Maximum login attempts</span>
+			<input type="number" name="config[auth][attempts]" min="1" tal:attributes="value CONFIG/auth/attempts"/>
+		</label>
+		<label>
+			<span i18n:translate="">Maximum login attempts ban for</span>
+			<input type="number" name="config[auth][attempts_timeout]" min="1" tal:attributes="value CONFIG/auth/attempts_timeout"/>
+			<em i18n:translate="">seconds</em>
+		</label>
+		<label>
+			<input type="checkbox" name="config[auth][https]" value="1" tal:attributes="checked CONFIG/auth/https"/>
+			<span i18n:translate="">HTTPS Login</span>
+		</label>
+		<label>
+			<span i18n:translate="">Default passphrase hash algorythm</span>
+			<select name="config[auth][default_pass_hash_algo]">
+				<option tal:repeat="algo php:\Poodle\Auth::algos()" tal:attributes="selected php:${algo}==${CONFIG/auth/default_pass_hash_algo}" tal:content="algo"></option>
+			</select>
+		</label>
+	</div>
+
+	<div class="section-panel" id="cookie">
+		<label>
+			<input type="checkbox" name="config[auth_cookie][allow]" tal:attributes="checked CONFIG/auth_cookie/allow"/>
+			<span i18n:translate="">Allow</span>
+		</label>
+		<label>
+			<span i18n:translate="">Name</span>
+			<input type="text" name="config[auth_cookie][name]" tal:attributes="value CONFIG/auth_cookie/name"/>
+		</label>
+		<label>
+			<span i18n:translate="">Expires</span>
+			<input type="number" name="config[auth_cookie][timeout]" min="1" max="1000" size="5" tal:attributes="value CONFIG/auth_cookie/timeout"/>
+			<span i18n:translate="">days</span>
+		</label>
+		<label>
+			<input type="checkbox" name="config[auth_cookie][ip_protection]" tal:attributes="checked CONFIG/auth_cookie/ip_protection"/>
+			<span i18n:translate="">IP Protection</span>
+		</label>
+		<label>
+			<span i18n:translate="">CSRF prevention</span>
+			<select name="config[auth_cookie][samesite]">
+				<option value="Strict">Strict</option>
+				<option value="Lax" tal:attributes="selected php:'Lax' == ${CONFIG/auth_cookie/samesite}">Lax</option>
+			</select>
+		</label>
+
+		<label>
+			<span i18n:translate="">Encryption cipher</span>
+			<select name="config[auth_cookie][cipher]" tal:define="cipher CONFIG/auth_cookie/cipher">
+				<option value="scramble"></option>
+				<option value="asymmetric" tal:attributes="selected php:'asymmetric'==${cipher}">Public and Private key pair</option>
+				<optgroup label="Symmetric">
+					<option tal:repeat="name php:\Poodle\Crypt\Symmetric::listCiphers()" tal:attributes="selected php:${name}==${cipher}" tal:content="name"></option>
+				</optgroup>
+			</select>
+		</label>
+		<label>
+			<span i18n:translate="">Encryption key</span>
+			<input type="text" name="config[auth_cookie][cryptkey]" tal:attributes="value CONFIG/auth_cookie/cryptkey"/>
+		</label>
+		<label>
+			<span i18n:translate="">Compression</span>
+			<select name="config[auth_cookie][compression]">
+				<option tal:repeat="name php:\Poodle\Crypt\Symmetric::listCompressors()" tal:attributes="value repeat/name/key; selected php:${repeat/name/key}==${CONFIG/auth_cookie/compression}" tal:content="name"></option>
+			</select>
+		</label>
+	</div>
+
+	<div class="section-panel" tal:repeat="provider auth_providers" tal:attributes="id provider/uid">
+		<label>
+			<span i18n:translate="">Name</span>
+			<input type="text" tal:attributes="name 'auth_provider[${provider/id}][name]'; value provider/name"/>
+		</label>
+
+		<fieldset>
+			<legend i18n:translate="">Active</legend>
+			<label>
+				<input type="checkbox" value="1" tal:attributes="name 'auth_provider[${provider/id}][mode][]'; checked php:${provider/mode}&amp;1"/>
+				<span i18n:translate="">Frontend</span>
+			</label>
+			<label>
+				<input type="checkbox" value="2" tal:attributes="name 'auth_provider[${provider/id}][mode][]'; checked php:${provider/mode}&amp;2"/>
+				<span i18n:translate="">Admin</span>
+			</label>
+		</fieldset>
+
+		<label tal:condition="provider/config" tal:repeat="cfg provider/config">
+			<span tal:content="cfg/label">Name</span>
+			<select tal:condition="php:'select'===${cfg/type}" tal:attributes="name 'auth_provider[${provider/id}][config][${cfg/name}]'">
+				<option tal:repeat="opt cfg/options" tal:attributes="value opt/value; selected opt/selected" tal:content="opt/label">opt/label</option>
+			</select>
+			<input tal:condition-else="" tal:attributes="name 'auth_provider[${provider/id}][config][${cfg/name}]'; type cfg/type; value cfg/value;"/>
+		</label>
+
+		<label>
+			<span i18n:translate="">PHP Class</span>
+			<input type="text" tal:attributes="name 'auth_provider[${provider/id}][class]'; value provider/class"/>
+		</label>
+
+		<fieldset tal:condition="provider/detect">
+			<legend i18n:translate="">Autodetection</legend>
+			<table>
+				<thead>
+					<th i18n:translate="">Name</th>
+					<th i18n:translate="">Regular expression</th>
+					<th i18n:translate="">Redirect URI</th>
+				</thead>
+				<tbody>
+					<tr tal:repeat="detect provider/detect">
+						<td tal:content="detect/name"></td>
+						<td tal:content="detect/regex"></td>
+						<td tal:content="detect/discover_uri"></td>
+					</tr>
+				</tbody>
+			</table>
+		</fieldset>
+	</div>
+
+	<div id="main-content-foot">
+		<button i18n:translate="">Save</button>
+	</div>
+
+	</form>
+</div>
+
+</div>

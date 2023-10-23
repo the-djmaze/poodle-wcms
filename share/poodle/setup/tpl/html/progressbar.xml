@@ -1,0 +1,5 @@
+<fieldset>
+	<legend><span tal:replace="PROGRESS_TITLE">PROGRESS_TITLE</span>: <span id="pc0" tal:attributes="id 'pc${PROGRESS_ID}'">0%</span></legend>
+	<progress tal:attributes="id 'pb${PROGRESS_ID}'" max="100" style="display:block;width:100%"></progress>
+</fieldset>
+<pre id="pbq0" tal:attributes="id 'pbq${PROGRESS_ID}'"></pre>

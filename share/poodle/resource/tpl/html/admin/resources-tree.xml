@@ -1,0 +1,20 @@
+
+<div id="main-content">
+	<div id="admin-resources">
+
+		<form method="get" action="/admin/resources/">
+			<input type="search" name="q" i18n:attributes="placeholder" placeholder="Search" tal:attributes="value SERVER/HTTP_SEARCH_QUERY"/>
+			<button i18n:translate="">Search</button>
+		</form>
+		<hr/>
+
+		<ul class="tree">
+		<li tal:repeat="resource resources" tal:attributes="class php:${resource/has_children}?'unfolds':${resource/class}">
+			<a href="" tal:attributes="href resource/id" tal:content="resource/name">index</a>
+			<span class="details">
+<!--				<a tal:attributes="href resource/uri" target="_blank" i18n:translate="">view</a>-->
+				<span i18n:attributes="title 'Revisions'" class="revisions" tal:content="resource/revisions">1</span>
+			</span>
+		</li>
+	</ul></div>
+</div>

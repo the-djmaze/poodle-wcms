@@ -1,0 +1,135 @@
+<?php
+if (!class_exists('Poodle',false)) { exit('no poodle found'); }
+
+$config = array(
+
+	/**
+	 * Poodle\Kernels\General
+	 */
+	'general' => array(
+//		'cache_dir' => strtr(__DIR__, DIRECTORY_SEPARATOR, '/').'/cache/',
+//		'cache_uri' => 'file://'.strtr(__DIR__, DIRECTORY_SEPARATOR, '/').'/cache/',
+//		'cache_uri' => 'apc:',
+//		'cache_uri' => 'memcache://127.0.0.1',
+//		'cache_uri' => 'memcached://127.0.0.1',
+
+		'auth_realm' => 'My Website',
+
+		'max_resource_revisions' => 0, // unlimited
+
+		'main_crypt' => null, // '{cipher:"bf-cbc",passphrase:"my-salt-string"}'
+
+		/**
+		 * When set to true, a cached template file date is compared to the
+		 * original file. If the cache file is older it will be recompiled.
+		 */
+		'design_mode' => false,
+
+		/**
+		 * Database Management System configuration
+		 * For database replication copy ['dbms']['master'] as ['dbms']['slave']
+		 */
+		'dbms' => array(
+			'adapter' => '',
+			'tbl_prefix' => '',
+			'master' => array(
+				'host' => '',
+				'username' => '',
+				'password' => '',
+				'database' => '',
+				'charset' => 'utf8',
+				/**
+				 * MySQL advanced options
+				 * http://php.net/mysqli_real_connect#mysqli.real-connect.parameters
+				 */
+/*
+				'socket' => '',
+				'flags' => 0,
+				'options' => array(), # http://php.net/mysqli_options#mysqli.options.parameters
+				'storage_engine' => '', # http://search.mysql.com/search?q=storage+engines&site=documentation
+				'query_cache_type' => 1, # http://dev.mysql.com/doc/refman/5.0/en/server-system-variables.html#sysvar_query_cache_type
+*/
+				/**
+				 * PostgreSQL advanced options
+				 * http://www.postgresql.org/docs/8.3/static/libpq-connect.html
+				 */
+/*
+				'hostaddr' => '',
+				'connect_timeout' => '',
+				'options' => '',
+				'requiressl' => '', # 7.x
+				'sslmode' => '', # 8.x
+				'service' => '', # 8.x
+*/
+			),
+		),
+	),
+
+	/**
+	 * Poodle\Kernels\CSS
+	 */
+	'css' => array(
+		'expires' => 8035200,     // 3 months
+		'max_embed_size' => 5800, // in bytes
+	),
+
+	/**
+	 * Poodle\Kernels\JavaScript
+	 */
+	'javascript' => array(
+		'expires' => 8035200, # 3 months
+		'strict'  => false,
+	),
+
+	/**
+	 * Poodle\Kernels\Crontab
+	 */
+	'crontab' => array(
+	),
+);
+
+/**
+ * Constants
+ */
+
+#\Poodle::$COMPRESS_OUTPUT = false; # default true
+#\Poodle::$DEBUG           = \Poodle::DBG_ALL;
+#\Poodle::$UMASK           = 0; # default 0022
+
+#\Poodle::$DIR_BASE   = './'; # /home/USER/www/
+#\Poodle::$DIR_MEDIA  = 'media/';
+
+#\Poodle::$URI_ADMIN  = '/admin/index.php';
+#\Poodle::$URI_BASE   = '';
+#\Poodle::$URI_INDEX  = '/index.php';
+#\Poodle::$URI_MEDIA  = 'media';
+
+#session_cache_limiter('public');
+#ini_set('session.save_handler', 'memcached'); # files | memcache | memcached | memory | redis | etc.
+#ini_set('session.save_path', '127.0.0.1:11211');
+#ini_set('session.save_handler', 'redis');
+#ini_set('session.save_path', 'tcp://10.133.14.9:6379?auth=yourverycomplexpasswordhere');
+#ini_set('session.gc_probability', 1); # for Debian users, when save_path is set
+#session_module_name('memcache');
+#session_save_path('/home/USER/sessions'); # keep outside public access!
+
+/**
+ * issues?
+ * cPanel php-fpm /var/cpanel/userdata/[USER]/[domain].php-fpm.yaml:
+ *     php_admin_flag_log_errors: no
+ *     php_admin_value_error_log: no
+ *     /usr/local/cpanel/scripts/php_fpm_config --rebuild
+ * php-fpm *.conf could have a php_admin_value[error_log]
+ */
+#ini_set('error_log', strtr(__DIR__, DIRECTORY_SEPARATOR, '/').'/cache/php-errors.'.gmdate('o-\WW').'.log');
+#ini_set('log_errors', 0);
+#ini_set('display_errors', 1);
+#error_reporting(2147483647);
+
+#stream_context_set_default(array('ssl' => array('crypto_method' => STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT /* | STREAM_CRYPTO_METHOD_TLSv1_3_CLIENT*/)));
+
+// Proxy|CloudFlare?
+if (false && !empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+	$_SERVER['REMOTE_ADDR'] = $_SERVER['HTTP_X_FORWARDED_FOR'];
+//	HTTP_CDN_LOOP: cloudflare
+}

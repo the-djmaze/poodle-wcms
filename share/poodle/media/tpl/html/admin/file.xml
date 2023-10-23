@@ -1,0 +1,153 @@
+<div class="table" id="admin-media">
+
+<div id="leftside">
+	<div id="leftside-body">
+		<a href="#media-item-info" i18n:translate="">Information</a>
+		<a tal:repeat="language L10N/getActiveList" tal:attributes="href '#media-item-l10n-${language/id}'" tal:content="language/label"></a>
+		<a tal:repeat="language L10N/getInactiveList" tal:attributes="href '#media-item-l10n-${language/id}'" tal:content="language/label"></a>
+	</div>
+</div>
+
+<div id="main-content">
+<form action="" method="post" class="ask-unload">
+
+	<div id="media-item">
+		<div id="media-item-info" class="section-panel">
+			<div class="error" i18n:translate="">WARNING! When moving the media to a different location, all pages with references to this file will receive errors</div>
+
+			<div style="float:left;margin-right:20px;min-width:400px;">
+				<label>
+					<span i18n:translate="">Location</span>
+					<select name="media_dir">
+						<option tal:repeat="dir media_dirs"
+							tal:attributes="value dir/value; title dir/value; class 'lvl${dir/level}'; selected php:${dir/value}==${media_item/getPath}"
+							tal:content="dir/name">dir name</option>
+					</select>
+				</label>
+
+				<label>
+					<span i18n:translate="">Filename</span>
+					<a tal:attributes="href media_item/getURI" tal:content="media_item/getFilename">filename.png</a>
+				</label>
+			</div>
+
+			<table style="margin:1em 0;width:auto;"><thead><tr>
+				<td i18n:translate="" colspan="2">File data</td>
+			</tr></thead><tbody>
+				<tr>
+					<td i18n:translate="">Size</td>
+					<td tal:content="media_item/getFileInfo/getHumanReadableSize">1 KiB</td>
+				</tr>
+				<tr>
+					<td i18n:translate="">Mime type</td>
+					<td tal:content="media_item/getFileInfo/getMimeType">image/png</td>
+				</tr>
+				<tr>
+					<td i18n:translate="">Created</td>
+					<td tal:content="php:context.L10N.date('Y-m-d H:i:s',${media_item/getFileInfo/getCTime})">12315678946</td>
+				</tr>
+				<tr>
+					<td i18n:translate="">Last modified</td>
+					<td tal:content="php:context.L10N.date('Y-m-d H:i:s',${media_item/getFileInfo/getMTime})">12315678946</td>
+				</tr>
+				<tr>
+					<td i18n:translate="">Last accessed</td>
+					<td tal:content="php:context.L10N.date('Y-m-d H:i:s',${media_item/getFileInfo/getATime})">12315678946</td>
+				</tr>
+			</tbody></table>
+
+			<div tal:condition="php:'image'==${media_item/getFileInfo/getMimeRoot}">
+				<hr/>
+				<fieldset style="display:inline-block">
+					<legend i18n:translate="">Edit image</legend>
+					<label>
+						<span i18n:translate="">Zoom</span>
+						10% <input id="image-zoom" type="range" value="100" min="10" max="200" step="10"/> 200%<br/>
+					</label>
+
+					<label>
+						<span i18n:translate="">Type</span>
+						<select id="image-formats" tal:attributes="data-file media_item/getFilename">
+							<option value="0" data-width="0" data-height="0" i18n:translate="">default</option>
+							<option tal:repeat="format php:\Poodle\Media::getImageFormats()"
+								tal:attributes="value format/id; data-width format/width; data-height format/height; data-folder format/dir"
+								tal:content="format/label"></option>
+						</select>
+					</label>
+
+					<label>
+						<span i18n:translate="">Rotate</span>
+						0° <input name="actions[rotate]" id="image-rotate" type="range" value="0" min="0" max="360" step="1"/> 360°<br/>
+					</label>
+
+					<label>
+						<input type="checkbox" name="actions[mirror]" id="image-mirror"/>
+						<span i18n:translate="">Mirror</span>
+					</label>
+
+					<span id="image-preview-size"></span><br/>
+					<img id="image-preview" tal:attributes="src '${URI_MEDIA}/${media_item/file}'" alt="" class="resize"/>
+
+					<h3 i18n:translate="">Scale image</h3>
+					<label>
+						<span i18n:translate="">Width</span>
+						<input name="scale[w]" type="number" min="1" step="1" tal:attributes="value media_info/width"/> px
+					</label>
+					<label>
+						<span i18n:translate="">Height</span>
+						<input name="scale[h]" type="number" min="1" step="1" tal:attributes="value media_info/height"/> px
+					</label>
+					<label>
+						<input type="checkbox" id="scale-proportional" checked=""/>
+						<span i18n:translate="">Proportional</span>
+					</label>
+<!--
+					<label>
+						<input type="checkbox" name="scale[crop]"/>
+						<span i18n:translate="">Crop</span>
+					</label>
+					<label>
+						<input type="color" name="scale[bgcolor]" value="transparent"/>
+						<span i18n:translate="">Background color</span>
+					</label>
+-->
+					<label>
+						<span i18n:translate="">Save as</span>
+						/media/images/<input type="text" id="image-filename" style="width:250px"/>.<i tal:replace="media_item/extension">png</i>
+						<button type="button" id="image-resize" i18n:translate="">Save</button>
+					</label>
+				</fieldset>
+			</div>
+			<div class="clear"></div>
+		</div>
+
+		<div tal:repeat="language L10N/getActiveList" tal:attributes="id 'media-item-l10n-${language/id}'" class="section-panel">
+			<label>
+				<span i18n:translate="">Title</span>
+				<input name="media_details[1][title]" tal:attributes="name 'media_details[${language/id}][title]'; value php:context.media_item.getTitle(${language/id})"/>
+			</label>
+			<label>
+				<span i18n:translate="">Description</span>
+				<textarea name="media_details[1][description]" tal:attributes="name 'media_details[${language/id}][description]'" tal:content="php:context.media_item.getDescription(${language/id})"></textarea>
+			</label>
+		</div>
+		<div tal:repeat="language L10N/getInactiveList" tal:attributes="id 'media-item-l10n-${language/id}'" class="section-panel">
+			<label>
+				<span i18n:translate="">Title</span>
+				<input name="media_details[1][title]" tal:attributes="name 'media_details[${language/id}][title]'; value php:context.media_item.getTitle(${language/id})"/>
+			</label>
+			<label>
+				<span i18n:translate="">Description</span>
+				<textarea name="media_details[1][description]" tal:attributes="name 'media_details[${language/id}][description]'" tal:content="php:context.media_item.getDescription(${language/id})"></textarea>
+			</label>
+		</div>
+	</div>
+
+	<div id="main-content-foot">
+		<button class="remove" style="float:left" name="delete" title="Remove file?" i18n:attributes="title" i18n:translate="">Delete</button>
+		<button i18n:translate="">Save</button>
+	</div>
+
+</form>
+</div>
+</div>

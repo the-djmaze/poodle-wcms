@@ -1,0 +1,33 @@
+<div class="table" id="admin-resource-default">
+
+<div id="leftside" class="resizable">
+	<div id="leftside-body">
+		<b i18n:translate="">Export</b>
+		<ul>
+			<li><a href="?export=data" i18n:translate="">Data</a></li>
+			<li><a href="?export=schema" i18n:translate="">Schema</a></li>
+			<li><a href="?tables=list" i18n:translate="">Table</a></li>
+		</ul>
+		<b i18n:translate="">Tables</b>
+		<ul>
+			<li><a href="?tables=analyze" i18n:translate="">Analyze</a></li>
+			<li><a href="?tables=check" i18n:translate="">Check</a></li>
+			<li><a href="?tables=optimize" i18n:translate="">Optimize</a></li>
+		</ul>
+	</div>
+</div>
+
+<div id="main-content">
+	<div>
+		<p>
+			<details tal:repeat="list db_lists">
+				<summary tal:content="list/name"></summary>
+				<ul>
+					<li tal:repeat="item list/items" tal:content="item"></li>
+				</ul>
+			</details>
+		</p>
+	</div>
+</div>
+
+</div>

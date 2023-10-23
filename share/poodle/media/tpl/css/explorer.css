@@ -1,0 +1,71 @@
+@import "poodle_media_tree";
+@import "mimetypes-64";
+
+html, body, .body, #leftside, #main-content { height:100%; }
+body, .body { margin:0; padding:0; }
+
+#leftside, #main-content { overflow: auto; }
+#main-content { max-width: 100%; width: auto; }
+
+#media_tree li.folds > a,
+#media_tree li.unfolds > a {
+	margin: 0;
+}
+
+#media-upload {
+	border:2px dotted #d3d3d3;
+	margin:0 0 6px 0;
+	padding:6px 30px 6px 6px ;
+	position:relative;
+}
+
+#media-upload button {
+	background:none;
+	border:0;
+	border-left:2px dotted #d3d3d3;
+	font-size:120%;
+	font-weight:bold;
+	position:absolute;
+	right:0;
+	top:0;
+	bottom:0;
+	height:100%;
+}
+
+.media-files {
+	margin:0;
+	padding:6px;
+}
+.media-files li {
+	background-repeat:no-repeat;
+	background-position:center center !important;
+	box-shadow: 0 0 4px 0 #999;
+	float:left;
+	font-size:10px;
+	text-align:center;
+	height:94px;
+	list-style:none;
+	margin:5px;
+	overflow:hidden;
+	width:100px;
+	transition: all 0.2s ease;
+}
+.media-files li:not([class^="mime-"]) {
+	background-size: contain;
+}
+/*
+.media-files {display:table;border-spacing: 10px;}
+.media-files li {
+	box-shadow: 0 0 4px 0 #999;
+	display:table-cell;
+	text-align:center;
+	height:100px;
+	vertical-align:bottom;
+	width:100px;
+}
+*/
+.media-files li img { margin:4px; max-width:90px; max-height:80px; }
+
+.media-files li:hover {
+	transform:scale(1.2);
+}

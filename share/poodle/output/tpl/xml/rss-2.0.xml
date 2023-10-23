@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<rss version="2.0">
+	<channel>
+		<title>Web Design/HTML</title>
+		<link>http://webdesign.about.com/blog/</link>
+		<description>Web Design/HTML</description>
+		<language>en-us</language>
+		<pubDate>Wed, 21 May 2003 19:53:10 -0500</pubDate>
+		<copyright/>
+		<lastBuildDate/>
+		<docs/>
+		<managingEditor/>
+		<webMaster/>
+		<skipHours/>
+		<skipDays/>
+<!--
+		<textinput>
+			<title/>
+			<description/>
+			<name/>
+			<link/>
+		</textinput>
+-->
+		<category domain=""/>
+		<generator/>
+		<cloud domain="" port="" path="" registerProcedure="" protocol=""/>
+		<ttl/>
+		<image>
+			<url>http://z.about.com/d/lg/rss.gif</url>
+			<title>About.com</title>
+			<link>http://about.com/</link>
+			<width>88</width>
+			<height>31</height>
+			<description>31</description>
+		</image>
+		<item tal:repeat="item items">
+			<title tal:content="item/title">What is a Font?</title>
+			<link tal:content="item/uri">http://webdesign.about.com/blog/a/000024.htm</link>
+			<description tal:content="item/meta-description">Font families can be hard to understand, especially when trying to develop a decent style sheet for a Web site. Once you understand what the fonts are, you can better use them to style your pages. What is a...</description>
+			<author/>
+			<category/>
+			<comments/>
+			<enclosure url="" length="" type=""/>
+			<guid isPermaLink="true"/>
+			<pubDate/>
+			<source url=""/>
+		</item>
+	</channel>
+</rss>

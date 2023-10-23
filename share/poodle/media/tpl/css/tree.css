@@ -1,0 +1,32 @@
+@import "poodle_tree";
+@import "mimetypes";
+
+#media_tree .details .filesize,
+#media_tree .details .options {
+	text-align:right;
+	width:6em;
+}
+/*
+.folder-archives  { background-image:url(../images/16x16/folder-archives.png) !important; }
+.folder-audio     { background-image:url(../images/16x16/folder-audio.png) !important; }
+.folder-documents { background-image:url(../images/16x16/folder-documents.png) !important; }
+.folder-images    { background-image:url(../images/16x16/folder-images.png) !important; }
+.folder-videos    { background-image:url(../images/16x16/folder-videos.png) !important; }
+
+.folder-archives,
+.folder-audio,
+.folder-documents,
+.folder-images,
+.folder-videos
+{
+	background-position: 0 center !important;
+}
+*/
+.tree li.folds > a,
+.tree li.unfolds > a {
+	margin-right: 20px;
+}
+.tree li li.folds > a,
+.tree li li.unfolds > a {
+	margin-right: 60px;
+}

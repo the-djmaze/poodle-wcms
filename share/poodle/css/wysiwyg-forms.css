@@ -1,0 +1,18 @@
+@import "poodle_wysiwyg";
+
+.wysiwyg .toolbars a.form,
+.wysiwyg .toolbars a.label,
+.wysiwyg .toolbars a.input,
+.wysiwyg .toolbars a.button,
+.wysiwyg .toolbars a.select,
+.wysiwyg .toolbars a.textarea,
+.wysiwyg .toolbars a.fieldset
+{
+	background: transparent url(../images/wysiwyg-forms.png) no-repeat 0 0;
+}
+.wysiwyg .toolbars a.input    { background-position: -24px 0 }
+.wysiwyg .toolbars a.button   { background-position: -48px 0 }
+.wysiwyg .toolbars a.select   { background-position: -72px 0 }
+.wysiwyg .toolbars a.textarea { background-position: -96px 0 }
+.wysiwyg .toolbars a.label    { background-position: -120px 0 }
+.wysiwyg .toolbars a.fieldset { background-position: -144px 0 }

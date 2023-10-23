@@ -1,0 +1,46 @@
+
+<div id="main-content">
+	<div>
+		<h1 i18n:translate="">Cron jobs</h1>
+		<table><thead><tr>
+				<th i18n:translate="">Callback</th>
+				<th i18n:translate="">Last executed</th>
+				<th i18n:translate="">Active</th>
+				<th i18n:translate="">Options</th>
+		</tr></thead><tbody>
+			<tr tal:repeat="entry crontab_entries">
+				<td tal:content="entry/callback"></td>
+				<td><time tal:condition="entry/last_run" tal:attributes="datetime entry/last_run" tal:content="php:context.L10N.date('DATE_L',${entry/last_run})"></time></td>
+				<td><i tal:condition="entry/active" class="text-success">✔</i><i tal:condition-else="" class="text-error">✗</i></td>
+				<td>
+					<a tal:attributes="href entry/id" i18n:translate="">Edit</a> |
+					<a tal:attributes="href '${entry/id}?run'" i18n:translate="">Execute</a> |
+					<a tal:attributes="href '${entry/id}/history'" i18n:translate="">History</a>
+				</td>
+			</tr>
+		</tbody>
+		<tfoot><tr>
+			<td colspan="3"></td>
+			<td>
+				<a href="0" i18n:translate="">Add</a> |
+				<a href="0?run" i18n:translate="">Execute all</a>
+			</td>
+			<td></td>
+		</tr></tfoot>
+		</table>
+
+		<details>
+			<summary i18n:translate="">Cron command</summary>
+			<div>
+				<p i18n:translate="">Setup one of the commands below in your server cron manager to run the above listed commands automatically.</p>
+				<code style="border-width:1px">
+				<var tal:replace="where_php_cli"></var> <var tal:replace="crontab_cmd"></var>
+				</code>
+				<p i18n:translate="">or</p>
+				<code style="border-width:1px">
+				<var tal:replace="where_php"></var> -q <var tal:replace="crontab_cmd"></var>
+				</code>
+			</div>
+		</details>
+	</div>
+</div>

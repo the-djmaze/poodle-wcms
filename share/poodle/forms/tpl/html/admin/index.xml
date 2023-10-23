@@ -1,0 +1,137 @@
+<div class="table" id="admin-forms">
+
+<div id="leftside">
+	<div id="leftside-body">
+		<a tal:repeat="form RESOURCE/forms" tal:attributes="href '/admin/poodle_forms/${form/id}/'" tal:content="form/name"></a>
+	</div>
+	<div id="leftside-foot">
+		<a href="/admin/poodle_forms/0/" class="new" i18n:translate="">New</a>
+	</div>
+</div>
+
+<div id="main-content" tal:condition="RESOURCE/form">
+<!--
+	<form action="" method="get" tal:condition="not:RESOURCE/form">
+		<label>
+			<span i18n:translate="">Select form</span>
+			<select name="form_id" id="form_ids">
+				<option></option>
+				<option value="0" tal:attributes="selected php:0===${RESOURCE/id}" i18n:translate="">New</option>
+				<option tal:repeat="form RESOURCE/forms" tal:attributes="value form/id; selected php:${form/id}==${RESOURCE/id}" tal:content="form/name"></option>
+			</select>
+		</label>
+	</form>
+-->
+
+	<form action="" method="post" tal:condition="php:!count($_GET)">
+	<div>
+		<button name="copy_form" style="float:right" i18n:translate="">Copy</button>
+
+		<label>
+			<span i18n:translate="">Name</span>
+			<input type="text" name="form[name]" tal:attributes="value RESOURCE/form/name"/>
+		</label>
+
+		<label>
+			<span i18n:translate="">Result page</span>
+			<select name="form[result_uri]">
+				<option tal:repeat="resource resources" tal:attributes="selected php:${resource/uri}==${RESOURCE/form/result_uri}; class resource/class; title resource/uri; value resource/uri" tal:content="resource/text">[root]</option>
+			</select>
+		</label>
+
+		<label>
+			<input type="checkbox" name="form[store_db]" value="1" tal:attributes="checked RESOURCE/form/store_db"/>
+			<span i18n:translate="">Save in database</span>
+		</label>
+
+		<label>
+			<input type="checkbox" name="form[email]" value="1" tal:attributes="checked RESOURCE/form/email"/>
+			<span i18n:translate="">Send by email</span>
+		</label>
+		<div id="form-mailto">
+			<span i18n:translate="">Email address</span>
+			<div tal:repeat="mailto RESOURCE/form/emailaddresses">
+				<input type="email" name="form[emailaddresses][]" tal:attributes="value mailto"/>
+			</div>
+			<div class="add">
+				<input type="email" name="form[emailaddresses][]"/>
+				<button type="button" class="icon-add">+</button>
+			</div>
+		</div>
+
+		<label tal:condition="emailresources/num_rows">
+			<span i18n:translate="">Thank you email</span>
+			<select name="form[send_email_resource]">
+				<option value="0"></option>
+				<option tal:repeat="resource emailresources" tal:attributes="selected php:${resource/id}==${RESOURCE/form/send_email_resource}; value resource/id" tal:content="resource/uri">email path</option>
+			</select>
+		</label>
+
+		<label>
+			<input type="checkbox" name="form[active]" value="1" tal:attributes="checked RESOURCE/form/active"/>
+			<span i18n:translate="">Active</span>
+		</label>
+
+		<a href="result" tal:condition="RESOURCE/form/result_count" i18n:translate="">Show result</a>
+		<a href="?fields" tal:condition="RESOURCE/id" i18n:translate="">Edit fields</a>
+	</div>
+	<div id="main-content-foot">
+		<button i18n:translate="">Save</button>
+	</div>
+	</form>
+
+	<form action="" method="post" id="form-add-field" tal:condition="php:isset($_GET['fields'])">
+		<div>
+			<span i18n:translate="">Add</span>:
+			<button name="add[text]" i18n:translate="">Text</button>
+			<button name="add[email]" i18n:translate="">Email address</button>
+			<button name="add[textarea]" i18n:translate="">Textarea</button>
+			<button name="add[checkbox]" i18n:translate="">Checkbox</button>
+			<button name="add[radio]" i18n:translate="">Radio</button>
+			<button name="add[select]" i18n:translate="">Select</button>
+			<button name="add[submit]" i18n:translate="">Sendbutton</button>
+		</div>
+	</form>
+
+	<form action="" method="post" id="form-fields" tal:condition="php:isset($_GET['fields'])">
+	<div>
+		<table><thead><tr>
+			<th i18n:translate="">Type</th>
+			<th i18n:translate="">Label</th>
+			<th i18n:translate="">Value/Options</th>
+			<th i18n:translate="">Required</th>
+			<th i18n:translate="">Actions</th>
+		</tr></thead><tbody>
+			<tr tal:repeat="field RESOURCE/form/fields">
+				<td tal:content="field/type">Text</td>
+				<td><input type="text" tal:attributes="value field/label; name 'formfields[${field/id}][label]'"/></td>
+				<td class="values"><div tal:condition="php:'submit'!=${field/type}" tal:omit-tag="">
+					<input type="text" tal:attributes="value field/value; name 'formfields[${field/id}][value]'" tal:condition="not:field/multiple"/>
+					<div tal:condition="field/multiple" tal:repeat="option field/value">
+						<input type="text" tal:attributes="value option; name 'formfields[${field/id}][value][]'"/>
+						<a href="#" class="icon-delete"></a>
+					</div>
+					<div tal:condition="field/multiple">
+						<div><input type="text" tal:attributes="name 'formfields[${field/id}][value][]'"/>
+						<a href="#" class="icon-delete"></a></div>
+						<a href="#" class="icon-add"></a>
+					</div>
+				</div></td>
+				<td>
+					<input type="checkbox" tal:condition="php:'submit'!=${field/type}" tal:attributes="checked field/required; name 'formfields[${field/id}][required]'"/>
+				</td>
+				<td>
+					<a tal:attributes="href '?move_up=${field/id}'; style php:${repeat/field/index}?null:'visibility:hidden'" class="icon-up"></a>
+					<a tal:attributes="href '?move_down=${field/id}'; style php:${repeat/field/number}==count(${RESOURCE/form/fields})?'visibility:hidden':null" class="icon-down"></a>
+					<a tal:attributes="href '?remove=${field/id}'" onclick="return confirm(\'Weet u zeker dat u dit element wilt verwijderen ?\');" class="icon-delete"></a>
+				</td>
+			</tr>
+		</tbody></table>
+	</div>
+	<div id="main-content-foot">
+		<button i18n:translate="">Save</button>
+	</div>
+	</form>
+
+</div>
+</div>

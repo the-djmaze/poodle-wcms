@@ -1,0 +1,16 @@
+
+<ul id="media-albums">
+	<li tal:repeat="album media_albums">
+		<a tal:attributes="href '${album/uri}'">
+			<picture>
+				<source tal:attributes="srcset '${URI_MEDIA}/albums/resized/${album/item_file_hash}/webp/thumbnail.png.webp'" type="image/webp"/>
+				<img alt="" tal:condition="album/item_file_hash" tal:attributes="src '${URI_MEDIA}/albums/resized/${album/item_file_hash}/thumbnail.png'"/>
+			</picture>
+		</a>
+		<div>
+			<a tal:attributes="href '${album/uri}'"><h2 tal:content="album/title">Album title</h2></a>
+			<time tal:attributes="datetime album/ptime" tal:content="php:context.L10N.date('DATE_L',${album/ptime})">publication date</time>
+			<p tal:content="structure album/body">Album description</p>
+		</div>
+	</li>
+</ul>

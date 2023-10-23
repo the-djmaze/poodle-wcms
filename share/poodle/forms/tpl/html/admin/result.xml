@@ -1,0 +1,22 @@
+
+<table><thead><tr>
+	<th><input type="checkbox" name="del_all" tal:attributes="value result/id"/></th>
+	<th i18n:translate="">Date</th>
+	<th tal:repeat="field RESOURCE/form/fields" tal:content="field/label"></th>
+</tr></thead>
+<tbody>
+	<tr tal:repeat="result RESOURCE/form/result">
+		<td><input type="checkbox" name="del[]" tal:attributes="value result/id"/></td>
+		<td tal:content="result/date"></td>
+		<td tal:repeat="field result/fields" tal:content="field/value"></td>
+	</tr>
+</tbody>
+<tfoot tal:condition="RESOURCE/form/result/pagination/items">
+	<tr><td colspan="0"><button name="delete" i18n:translate="">delete</button></td></tr>
+	<tr><td colspan="0" style="text-align:center">
+		<a tal:attributes="href RESOURCE/form/result/pagination/prev" tal:condition="RESOURCE/form/result/pagination/prev" style="float:left">◀</a>
+		<a tal:attributes="href RESOURCE/form/result/pagination/next" tal:condition="RESOURCE/form/result/pagination/next" style="float:right">▶</a>
+		<a tal:repeat="item RESOURCE/form/result/pagination/items" tal:attributes="href item/uri" tal:content="item/page" style="margin:0 0.5em"></a>
+	</td></tr>
+</tfoot>
+</table>

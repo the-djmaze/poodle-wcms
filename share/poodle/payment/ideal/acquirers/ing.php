@@ -1,0 +1,52 @@
+<?php
+
+namespace Poodle\Payment\iDEAL\Acquirers;
+
+class ING extends \Poodle\Payment\iDEAL\Acquirer
+{
+	/*
+	 * iDEAL Basic
+	 */
+
+	public function getForm()
+	{
+		if ($this->testMode) {
+			$this->urlAcquirer = 'https://idealtest.secure-ing.com/ideal/mpiPayInitIng.do';
+		} else {
+			$this->urlAcquirer = 'https://ideal.secure-ing.com/ideal/mpiPayInitIng.do';
+		}
+		return parent::getForm();
+	}
+
+	/*
+	 * iDEAL Advanced
+	 */
+
+	private function setAcquirerUrl()
+	{
+		if ($this->testMode) {
+			$this->urlAcquirer = 'https://idealtest.secure-ing.com/ideal/iDEALv3';
+		} else {
+			$this->urlAcquirer = 'https://ideal.secure-ing.com/ideal/iDEALv3';
+		}
+	}
+
+	public function getIssuers()
+	{
+		self::setAcquirerUrl();
+		return parent::getIssuers();
+	}
+
+	public function getNewTransaction($issuerId)
+	{
+		self::setAcquirerUrl();
+		return parent::getNewTransaction($issuerId);
+	}
+
+	public function getTransactionStatus($transactionId)
+	{
+		self::setAcquirerUrl();
+		return parent::getTransactionStatus($transactionId);
+	}
+
+}

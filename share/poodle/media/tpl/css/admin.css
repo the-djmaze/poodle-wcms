@@ -1,0 +1,159 @@
+@import "mimetypes-64";
+@import "poodle_areaselector";
+
+#admin-media .table {
+	padding-top:0;
+	padding-bottom:0;
+}
+
+#admin-media .view-icons,
+#admin-media .view-list {
+	background:url(../images/media/view-list.png) no-repeat center center;
+	border:1px solid transparent;
+	float:right;
+	height:20px;
+	margin:3px 0 0 4px;
+	width:19px;
+}
+#admin-media .view-icons {
+	background-image:url(../images/media/view-icons.png);
+}
+#admin-media .view-icons.current,
+#admin-media .view-list.current {
+	border:1px solid #d3d3d3;
+}
+
+
+#admin-media #media_tree_col {
+	float:left;
+	max-width:500px;
+	min-width:100px;
+	overflow:hidden;
+	padding:20px 0 20px 0;
+	resize:horizontal;
+	width:150px;
+}
+
+.media-files a {
+	background-color:#fff;
+	background-repeat:no-repeat;
+	background-position:center center !important;
+	box-shadow: 0 0 4px 0 #999;
+	float:left;
+	font-size:10px;
+	text-align:center;
+	height:94px;
+	margin:5px;
+	overflow:hidden;
+	width:100px;
+	transition: all 0.2s ease;
+}
+.media-files a:not([class^="mime-"]) {
+	background-size: contain;
+}
+.media-files a:hover {
+	transform:scale(1.2);
+}
+
+#admin-media #media_tree {
+	border:0;
+	width:100%;
+}
+
+#media_tree .details > *:not(.options) {
+	display:none;
+}
+
+#admin-media #media_tree .details > .options {
+	border: 0;
+	width: auto;
+	max-width: 60px;
+}
+
+#admin-media #media_items_col {
+	border-left:1px solid #D3D3D3;
+	display:table-cell;
+	padding:10px 0 10px 10px;
+	vertical-align: top;
+	width:100%;
+}
+
+#admin-media #media-upload {
+	border:2px dotted #d3d3d3;
+	margin:0 0 6px 0;
+	padding:6px 30px 6px 6px ;
+	position:relative;
+}
+
+#admin-media #media-upload button {
+	background:none;
+	border:0;
+	border-left:2px dotted #d3d3d3;
+	font-size:120%;
+	font-weight:bold;
+	position:absolute;
+	right:0;
+	top:0;
+	bottom:0;
+	height:100%;
+}
+
+#admin-media #media_dir_files th + th {
+	width:120px;
+	white-space:nowrap;
+}
+#admin-media #media_dir_files th + th + th {
+	text-align:right;
+	width:80px;
+}
+#admin-media #media_dir_files td + td + td {
+	text-align:right;
+	width:80px;
+}
+
+#image-size { height:2em; }
+
+
+#admin-media-album .images {
+	margin-top: 2em;
+}
+#admin-media-album .images * {
+	vertical-align:middle;
+}
+
+#admin-media-album .images li {
+	border-radius:4px;
+	height:32px;
+	line-height:32px;
+	margin:4px 0;
+}
+#admin-media-album .images li img { height:32px; margin:0; }
+#admin-media-album .images li:hover { background-color:#e3e3e3; }
+#admin-media-album .images li:hover img {
+	background-color:#e3e3e3;
+	border:10px solid #e3e3e3;
+	border-radius:10px;
+	height:auto;
+	margin-top:-10px;
+	position:absolute;
+	z-index:99999;
+}
+#admin-media-album .images .details {
+	float: right;
+}
+
+#admin-media-album .images li:first-child button.up,
+#admin-media-album .images li:last-child button.down {
+	visibility:hidden;
+}
+
+a[href*="?rotate=90"] {
+	background:url(../images/media/rotate-right.png) no-repeat 0 center;
+	margin-right:20px;
+	padding-left:14px;
+}
+a[href*="?rotate=-90"] {
+	background:url(../images/media/rotate-left.png) no-repeat 0 center;
+	padding-left:14px;
+}
+

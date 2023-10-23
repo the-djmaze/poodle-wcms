@@ -1,0 +1,41 @@
+
+<div class="table" id="admin-groups">
+
+<div id="leftside">
+	<div id="leftside-body"></div>
+	<div id="leftside-foot">
+		<a href="0" class="new" i18n:translate="">New</a>
+	</div>
+</div>
+
+<div id="main-content">
+	<div>
+		<table><thead>
+			<tr>
+				<th>Name</th>
+				<th>Type</th>
+				<th></th>
+			</tr>
+		</thead><tbody tal:repeat="group groups">
+		<tr>
+			<td><a tal:attributes="href group/id" tal:content="group/name">group/name</a></td>
+			<td>
+				<span tal:condition="not:php:${group/type}&amp;1" i18n:translate="">Open</span>
+				<span tal:condition="php:${group/type}&amp;1" i18n:translate="">Closed</span>
+				<span tal:condition="php:${group/type}&amp;2" i18n:translate="">Hidden</span>
+			</td>
+		</tr>
+		<tr tal:repeat="group group/sub_groups">
+			<td style="text-indent:2em"><a tal:attributes="href group/id" tal:content="group/name">group/name</a></td>
+			<td>
+				<span tal:condition="not:php:${group/type}&amp;1" i18n:translate="">Open</span>
+				<span tal:condition="php:${group/type}&amp;1" i18n:translate="">Closed</span>
+				<span tal:condition="php:${group/type}&amp;2" i18n:translate="">Hidden</span>
+			</td>
+		</tr>
+		</tbody>
+		</table>
+	</div>
+</div>
+
+</div>

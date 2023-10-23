@@ -1,0 +1,65 @@
+<div class="table" id="admin-media">
+
+<div id="leftside">
+	<div id="leftside-body">
+		<a href="/admin/poodle_media/images/" i18n:translate="">Images</a>
+		<a href="/admin/poodle_media/archives/" i18n:translate="">Archives</a>
+		<a href="/admin/poodle_media/documents/" i18n:translate="">Documents</a>
+		<a href="/admin/poodle_media/audio/" i18n:translate="">Audio</a>
+		<a href="/admin/poodle_media/videos/" i18n:translate="">Videos</a>
+		<a href="/admin/poodle_media/" i18n:translate="">Other</a>
+		<hr/>
+		<a href="?synchronize" i18n:translate="">Synchronize database</a>
+	</div>
+</div>
+
+<div id="main-content">
+	<div id="main-content-head">
+		<a class="view-list" href="?view=list"></a>
+		<a class="view-icons current"></a>
+	</div>
+
+	<div class="table">
+
+		<div id="media_tree_col" class="resizable">
+		<ul class="tree" id="media_tree">
+			<li class="root folder-media" tal:attributes="class media_tree_root_class">
+				<b tal:content="media_tree_title">Media</b>
+				<span class="details"></span>
+			</li>
+			<li tal:repeat="item media_items" tal:attributes="class php:${item/isDir}?'unfolds':null">
+				<a tal:condition="item/isDir" tal:attributes="href php:\Poodle\Media::getFileUri(${item})" i18n:translate="" tal:content="item/getFilename">index</a>
+				<a tal:condition="not:item/isDir" tal:attributes="href php:\Poodle\Media::getFileUri(${item}); class item/getCSSClass" tal:content="item/getFilename">index</a>
+				<span class="details">
+					<span class="filesize" tal:content="item/getHumanReadableSize" tal:condition="not:item/isDir">1 KiB</span>
+					<span tal:content="item/getPermsRWX"></span>
+				</span>
+			</li>
+		</ul>
+		</div>
+
+		<div id="media_items_col">
+
+			<form action="" method="post" enctype="multipart/form-data" id="media-upload"><div>
+				<span i18n:translate="">Add file</span>
+				<input id="media-upload-file" type="file" name="media_file" i18n:attributes="title 'Browse'"/>
+				<input type="hidden" name="media_dir" tal:attributes="value media_dir"/>
+				<button type="submit" name="upload">+</button>
+			</div></form>
+
+			<div class="media-files mime-64">
+				<span tal:omit-tag="" tal:repeat="file media_dir_files">
+					<a tal:condition="php:in_array(${file/getExtension}, array('JPG','jpg','jpeg','png'))"
+						tal:attributes="href php:\Poodle\Media::getFileUri(${file}); title file/getFilename;
+						style 'background-image:url(${URI_BASE}/${file/getPathname})';"></a>
+					<a tal:condition="php:!in_array(${file/getExtension}, array('JPG','jpg','jpeg','png'))"
+						tal:attributes="href php:\Poodle\Media::getFileUri(${file}); title file/getFilename; class file/getCSSClass"
+						tal:content="file/getNameWithoutExtension"></a>
+				</span>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+</div>

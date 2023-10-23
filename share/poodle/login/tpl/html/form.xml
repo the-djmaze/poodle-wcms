@@ -1,0 +1,39 @@
+
+<form class="auth" action="?auth" method="post" tal:attributes="data-p-challenge php:Poodle\AntiSpam\Captcha::generateHidden()">
+	<div class="login-content">
+		<label for="auth-provider" tal:condition="php:1&lt;count(${auth_providers})">
+			<span i18n:translate="">Login method</span>
+			<select name="provider" id="auth-provider">
+				<option value="1" tal:repeat="provider auth_providers" tal:attributes="value provider/id" tal:content="provider/name">Normal</option>
+			</select>
+		</label>
+		<div id="auth-providers">
+			<div tal:repeat="provider auth_providers" tal:attributes="id 'auth-provider-${provider/id}'">
+				<input type="hidden" name="provider" tal:attributes="value provider/id" tal:condition="php:1==count(${auth_providers})"/>
+				<div tal:repeat="field provider/fields">
+					<label for="auth_claimed_id" tal:attributes="for field/name">
+						<span i18n:translate="" tal:content="field/label">Username</span>
+						<input type="text" name="auth_claimed_id" id="auth_claimed_id"
+							tal:attributes="name 'auth[${provider/id}][${field/name}]';
+								id field/name;
+								type field/type;
+								inputmode field/inputmode;
+								pattern field/pattern;
+								value field/value"/>
+					</label>
+				</div>
+				<div tal:condition="php:1==${provider/id}" class="forgot-pw">
+					<a href="?forgot" i18n:translate="">Forgot passphrase?</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="login-footer">
+		<label tal:condition="CONFIG/auth_cookie/allow">
+			<input type="checkbox" value="1" name="auth_cookie"/>
+			<span i18n:translate="">Remember login</span>
+		</label>
+		<input type="hidden" name="redirect_uri" tal:attributes="value login_redirect_uri"/>
+		<button i18n:translate="">Login</button>
+	</div>
+</form>

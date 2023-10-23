@@ -1,0 +1,9 @@
+<div class="table" id="admin-menus">
+
+<div id="leftside">
+	<div id="leftside-body">
+		<a tal:repeat="menu menus" tal:attributes="href '/admin/poodle_menu/${menu/id}/'" tal:content="menu/name"></a>
+	</div>
+</div>
+
+</div>

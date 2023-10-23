@@ -1,0 +1,29 @@
+
+<form method="post" action="">
+
+<div tal:repeat="field RESOURCE/form/fields">
+	<label tal:attributes="class php:${field/error}?'error':null" tal:condition="php:'radio'!=${field/type} and 'submit'!=${field/type}">
+
+		<input tal:condition="php:'checkbox'==${field/type}" type="checkbox" tal:attributes="name 'ffield[${field/id}]'; required field/required; value field/value"/>
+
+		<span tal:content="field/label"></span>
+
+		<input tal:condition="php:'text'==${field/type}"  type="text"  tal:attributes="name 'ffield[${field/id}]'; placeholder field/placeholder; required field/required; value field/value"/>
+		<input tal:condition="php:'email'==${field/type}" type="email" tal:attributes="name 'ffield[${field/id}]'; placeholder field/placeholder; required field/required; value field/value"/>
+		<textarea tal:condition="php:'textarea'==${field/type}" tal:attributes="name 'ffield[${field/id}]'; placeholder field/placeholder" tal:content="field/value"></textarea>
+		<select tal:condition="php:'select'==${field/type}" tal:attributes="name 'ffield[${field/id}]'">
+			<option tal:repeat="option field/options" tal:content="option"></option>
+		</select>
+	</label>
+	<fieldset class="radio" tal:condition="php:'radio'==${field/type}">
+		<legend tal:content="field/label"></legend>
+		<label tal:attributes="class php:${field/error}?'error':null" tal:repeat="option field/options">
+			<input type="radio" tal:attributes="name 'ffield[${field/id}]'; value option"/>
+			<span tal:content="option"></span>
+		</label>
+	</fieldset>
+	<button tal:condition="php:'submit'==${field/type}" tal:content="field/label"></button>
+</div>
+
+</form>
+<p tal:condition="RESOURCE/form/hasRequiredFields" i18n:translate="">Marked fields are required</p>

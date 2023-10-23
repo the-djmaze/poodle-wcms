@@ -1,0 +1,108 @@
+<html
+	xmlns:tal="http://xml.zope.org/namespaces/tal"
+	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+	xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+	i18n:attributes="lang lng"
+	tal:omit-tag="">
+<head tal:replace="">
+	<title>Poodle WCMS Installer: Server Check</title>
+	<link rel="stylesheet" href="../../tpl/default/css/reset.css" type="text/css" media="screen"/>
+	<link rel="stylesheet" href="../style.css" type="text/css" media="screen"/>
+	<script src="../inc/js/poodle.js"></script>
+	<script src="install.js"></script>
+</head>
+<body tal:omit-tag="">
+<div id="header" tal:replace="">
+	<div style="float:right;margin:10px 1px 0 0;">
+	<span>Language</span>
+	<select>
+		<option value="en">English</option>
+		<option value="nl">Nederlands</option>
+	</select></div>
+	<h1>Poodle WCMS Installer</h1>
+	<div id="menu"><ol>
+	<li class="done">License</li>
+	<li class="current">Server Check</li>
+	<li>Configuration</li>
+	<li>Database</li>
+	<li>Create Account</li>
+	</ol></div>
+</div>
+<div id="content" tal:omit-tag="">
+<!-- start content -->
+
+<div class="tabs">
+
+<fieldset class="current"><legend i18n:translate="">Access Privileges</legend>
+<div><table><tbody>
+	<tr class="ok" tal:repeat="item privileges" tal:attributes="class item/CLASS">
+		<td tal:content="item/TITLE">title</td>
+		<td class="status" tal:content="item/STATUS">status</td>
+		<td class="info"><i class="infobox"><span tal:content="item/INFO">info</span></i></td>
+	</tr>
+<!--
+	<tr>
+		<th colspan="2" i18n:translate="">Add-on uploading</th>
+		<td class="info"><i class="infobox"><span i18n:translate="comp_upload_desc">comp_upload_desc</span></i></td>
+	</tr>
+	<tr class="ok" tal:repeat="item comp_dirs" tal:attributes="class item/CLASS">
+		<td tal:content="item/TITLE">title</td>
+		<td class="status" tal:content="item/STATUS">status</td>
+		<td class="info"><i class="infobox"><span tal:content="item/INFO">info</span></i></td>
+	</tr>
+-->
+</tbody></table></div>
+</fieldset>
+
+<fieldset><legend>HTTPD</legend>
+<div><table><tbody>
+	<tr class="fail" tal:repeat="item httpd" tal:attributes="class item/CLASS">
+		<td tal:content="item/TITLE">title</td>
+		<td class="status" tal:content="item/STATUS">status</td>
+		<td class="info"><i class="infobox"><span tal:content="item/INFO">info</span></i></td>
+	</tr>
+</tbody></table></div>
+</fieldset>
+
+<fieldset><legend i18n:translate="">Database Extensions</legend><div><table><tbody>
+	<tr class="ok" tal:repeat="item dbms" tal:attributes="class item/CLASS">
+		<td><a href="#" tal:content="item/TITLE" tal:attributes="href item/URI">title</a></td>
+		<td class="status" tal:content="item/STATUS">status</td>
+		<td class="info"><i class="infobox"><span tal:content="item/INFO">info</span></i></td>
+	</tr>
+</tbody></table></div>
+</fieldset>
+
+<fieldset><legend i18n:translate="">PHP Extensions</legend>
+<div><table><tbody>
+	<tr class="fail" tal:repeat="item php_ext" tal:attributes="class item/CLASS">
+		<td><a href="#" tal:content="item/TITLE" tal:attributes="href item/URI">title</a></td>
+		<td class="status" tal:content="item/STATUS">status</td>
+		<td class="info"><i class="infobox"><span tal:content="item/INFO">info</span></i></td>
+	</tr>
+</tbody></table></div>
+</fieldset>
+
+<fieldset><legend i18n:translate="">Preferred PHP Configuration</legend>
+<div><table><tbody>
+	<tr class="ok" tal:repeat="item php_cfg" tal:attributes="class item/CLASS">
+		<td><a href="#" tal:content="item/TITLE" tal:attributes="href item/URI">title</a></td>
+		<td class="value" tal:content="item/VALUE">value</td>
+		<td class="status" tal:content="item/STATUS">status</td>
+		<td class="info"><i class="infobox"><span tal:content="item/INFO">info</span></i></td>
+	</tr>
+</tbody></table></div>
+</fieldset>
+
+</div>
+
+<div id="stepbuttons">
+	<a href="?step=3" class="button" tal:attributes="href uri_next" tal:condition="not:FATAL_ERROR" i18n:translate="">Next</a>
+	<a href="?step=2" class="button" onclick="self.location.reload(true); return false;" i18n:translate="">Reload</a>
+</div>
+
+
+
+
+<!-- end content -->
+</div></body></html>

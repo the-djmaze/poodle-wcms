@@ -1,0 +1,24 @@
+<!--
+<fieldset class="debugger" tal:condition="bugs">
+	<legend>Debug</legend>
+	<div tal:repeat="files bugs">
+		<strong tal:content="repeat/files/key">filename</strong>
+		<ul>
+			<li tal:repeat="types files"><span tal:replace="repeat/types/key">type</span><ul>
+				<li tal:repeat="msg types" tal:content="msg">message</li>
+			</ul></li>
+		</ul>
+	</div>
+</fieldset>
+<script type="text/javascript" tal:content="'console.dir(${debug_json});'"></script>
+<div tal:content="'Memory Usage: ${memory_usage} seconds'"></div>
+<div tal:content="'Page generated in: ${parse_time} seconds'"></div>
+<div tal:content="'TPL generated in: ${tpl_time} seconds'"></div>
+<script type="text/javascript" tal:content="'console.log(&quot;${parse_time}&quot;);'"></script>
+<script type="text/javascript" tal:condition="queries" tal:content="'console.log(&quot;${queries}&quot;);'"></script>
+<script type="text/javascript" tal:condition="memory_usage" tal:content="'console.log(&quot;${memory_usage}&quot;);'"></script>
+<script type="text/javascript" tal:condition="bugs" tal:content="'php_bugs = ${bugs_json}'"></script>
+-->
+</div>
+<script type="text/javascript" tal:content="'Poodle.onDOMReady(function(){Poodle.Debugger(${debug_json})});'"></script>
+</body></html>

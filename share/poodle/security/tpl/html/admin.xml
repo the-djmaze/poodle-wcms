@@ -1,0 +1,33 @@
+
+<form action="" method="post">
+<table>
+<thead><tr>
+	<th>Domain</th>
+	<th>ban url</th>
+	<th>ban email</th>
+	<th>ban mx</th>
+</tr></thead>
+<tbody>
+	<tr tal:repeat="domain security_domains">
+		<td tal:content="domain/name"></td>
+		<td><input type="hidden" tal:attributes="name 'security_domains[${repeat/domain/key}][name]'; value domain/name"/>
+			<input type="checkbox" value="1" tal:attributes="name 'security_domains[${repeat/domain/key}][url]'; checked domain/url"/></td>
+		<td><input type="checkbox" value="1" tal:attributes="name 'security_domains[${repeat/domain/key}][email]'; checked domain/email"/></td>
+		<td><input type="checkbox" value="1" tal:attributes="name 'security_domains[${repeat/domain/key}][dns_mx]'; checked domain/dns_mx"/></td>
+		<td><button name="delete" class="icon-delete" i18n:translate="">Delete</button></td>
+	</tr>
+</tbody><tfoot>
+	<tr>
+		<td><input name="add_security_domain[name]" type="text" value=""/></td>
+		<td><input name="add_security_domain[url]" type="checkbox" value="1"/></td>
+		<td><input name="add_security_domain[email]" type="checkbox" value="1"/></td>
+		<td><input name="add_security_domain[dns_mx]" type="checkbox" value="1"/></td>
+		<td><button name="add" class="icon-add" i18n:translate="">Add</button></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td><button name="save" i18n:translate="">Save</button></td>
+	</tr>
+</tfoot>
+</table>
+</form>

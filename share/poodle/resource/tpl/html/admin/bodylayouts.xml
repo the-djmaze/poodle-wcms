@@ -1,0 +1,34 @@
+<div class="table" id="admin-resources">
+
+<div id="leftside" class="resizable">
+	<div id="leftside-body">
+		<a tal:repeat="layout php:\Poodle\Resource\BodyLayouts::getList()"
+		   tal:attributes="href '/admin/poodle_resource_bodylayouts/${layout/id}'"
+		   tal:content="layout/name"
+		   href="/admin/poodle_resource_bodylayouts/1">Layout 1</a>
+	</div>
+	<div id="leftside-foot">
+		<a href="/admin/poodle_resource_bodylayouts/0" class="new" i18n:translate="">New</a>
+	</div>
+</div>
+
+<div id="main-content">
+	<form action="" method="post" tal:condition="bodylayout">
+	<div>
+		<label>
+			<span i18n:translate="">Name</span>
+			<input type="text" name="bodylayout[name]" tal:attributes="value bodylayout/name"/>
+		</label>
+		<label>
+			<span i18n:translate="">Content</span>
+			<textarea class="wysiwyg" name="bodylayout[body]" tal:content="bodylayout/body"></textarea>
+		</label>
+	</div>
+
+	<div id="main-content-foot">
+		<button i18n:translate="">Save</button>
+	</div>
+	</form>
+</div>
+
+</div>

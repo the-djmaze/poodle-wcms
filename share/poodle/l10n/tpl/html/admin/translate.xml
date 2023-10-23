@@ -1,0 +1,46 @@
+<div class="table" id="admin-l10n">
+
+<div id="leftside">
+	<div id="leftside-body">
+		<a href="/admin/poodle_l10n/" i18n:translate="">Settings</a>
+		<a href="/admin/poodle_l10n/translate/" i18n:translate="">Translate</a>
+	</div>
+</div>
+
+<div id="main-content">
+	<form action="" method="post">
+	<div id="l10n-translate">
+		<table><thead>
+		<tr>
+			<th i18n:translate="">ID</th>
+			<th>
+				<select name="lng" id="translate-l10n_id" tal:define="inactivelanguages L10N/getInactiveList">
+					<option tal:repeat="language L10N/getActiveList" tal:attributes="value language/value; selected php:${language/value}==${trans_lng}" tal:content="language/label">English</option>
+					<optgroup label="inactive" i18n:attributes="label" tal:condition="inactivelanguages">
+						<option tal:repeat="language inactivelanguages" tal:attributes="value language/value; selected php:${language/value}==${trans_lng}" tal:content="language/label">English</option>
+					</optgroup>
+				</select>
+			</th>
+			<th></th>
+		</tr>
+		</thead><tbody>
+		<tr tal:repeat="lang translations">
+			<td tal:content="lang/msg_id"></td>
+			<td><input type="text" tal:attributes="name 'translate[${lang/msg_id}]'; value lang/value | lang/en"/></td>
+			<td></td>
+		</tr>
+		</tbody>
+		<tfoot><tr>
+			<td><input type="text" name="translate_add[msg_id]"/></td>
+			<td><input type="text" name="translate_add[value]"/></td>
+			<td><button name="add" class="icon-add" i18n:translate="">Add</button></td>
+		</tr></tfoot>
+		</table>
+	</div>
+	<div id="main-content-foot">
+		<button i18n:translate="">Save</button>
+	</div>
+	</form>
+
+</div>
+</div>

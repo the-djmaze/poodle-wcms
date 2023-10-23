@@ -1,0 +1,167 @@
+<div class="table" id="admin-identity">
+
+<div id="leftside">
+	<div id="leftside-body">
+		<a href="#identity-general" i18n:translate="">General</a>
+		<a href="#identity-groups" i18n:translate="">Groups</a>
+		<a href="#identity-auth" i18n:translate="">Authentication</a>
+	</div>
+	<div id="leftside-foot">
+		<a href="0" class="new" i18n:translate="">New</a>
+	</div>
+</div>
+
+<div id="main-content">
+	<form action="" method="post" autocomplete="off">
+	<div id="identity-general" class="section-panel">
+		<label>
+			<span i18n:translate="">Status</span>
+			<select id="identity_type" name="identity[type]">
+				<option value="0" i18n:translate="">Inactive</option>
+				<option value="1" i18n:translate="" tal:attributes="selected identity/type">Active</option>
+			</select>
+		</label>
+<!--
+		<label id="identity_inactive_reason" tal:attributes="hidden identity/type">
+			<span i18n:translate="">Reason account inactivity</span>
+			<textarea name="identity[inactive_reason]" style="width:380px;height:100px" tal:content=""></textarea>
+		</label>
+-->
+		<label>
+			<span i18n:translate="">Nickname</span>
+			<input type="text" name="identity[nickname]" pattern="[^&amp;&gt;&lt;]+" required="" tal:attributes="value identity/nickname"/>
+		</label>
+
+		<label>
+			<span i18n:translate="">Given name</span>
+			<input type="text" name="identity[givenname]" tal:attributes="value identity/givenname"/>
+		</label>
+
+		<label>
+			<span i18n:translate="">Surname</span>
+			<input type="text" name="identity[surname]" tal:attributes="value identity/surname"/>
+		</label>
+
+		<label>
+			<span i18n:translate="">Email address</span>
+			<input type="email" name="identity[email]" required="" tal:attributes="value identity/email"/>
+		</label>
+
+		<label>
+			<span i18n:translate="">Language</span>
+			<select name="identity[language]">
+				<option tal:repeat="language L10N/getActiveList" tal:attributes="value language/value; selected php:${language/value}==${identity/language}" tal:content="language/label">English</option>
+			</select>
+		</label>
+
+		<label>
+			<span i18n:translate="">Time zone</span>
+			<select name="identity[timezone]">
+				<option value="UTC">UTC</option>
+				<xsl:for-each select="L10N/timezones">
+				<optgroup label="" tal:condition="php:is_array(${timezones})" tal:attributes="label repeat/timezones/key">
+					<xsl:for-each select="timezones">
+					<option tal:condition="repeat/timezones/key" tal:attributes="value repeat/timezones/key; selected php:${repeat/timezones/key}===${identity/timezone}" tal:content="timezones"></option>
+					</xsl:for-each>
+				</optgroup>
+				</xsl:for-each>
+			</select>
+		</label>
+
+		<fieldset tal:repeat="section identity_fields">
+			<legend tal:content="section/label">section</legend>
+			<div tal:repeat="field section/fields">
+				<label tal:define="attr field/attr">
+					<input tal:condition="php:2==${field/type}" type="checkbox" tal:attributes="name 'identity[${field/name}]'; checked field/value; required attr/required; value attr/value"/>
+					<span tal:content="field/label">field/label</span>
+					<input    tal:condition="php: 1==${field/type}" type="text"     tal:attributes="name 'identity[${field/name}]'; value field/value; required attr/required; placeholder attr/placeholder"/>
+					<input    tal:condition-else="php: 3==${field/type}" type="color"    tal:attributes="name 'identity[${field/name}]'; value field/value; required attr/required; placeholder attr/placeholder"/>
+					<input    tal:condition-else="php: 4==${field/type}" type="date"     tal:attributes="name 'identity[${field/name}]'; value field/value; required attr/required; placeholder attr/placeholder"/>
+					<input    tal:condition-else="php: 5==${field/type}" type="datetime" tal:attributes="name 'identity[${field/name}]'; value field/value; required attr/required; placeholder attr/placeholder"/>
+					<input    tal:condition-else="php: 7==${field/type}" type="email"    tal:attributes="name 'identity[${field/name}]'; value field/value; required attr/required; placeholder attr/placeholder"/>
+					<input    tal:condition-else="php: 9==${field/type}" type="month"    tal:attributes="name 'identity[${field/name}]'; value field/value; required attr/required; placeholder attr/placeholder"/>
+					<input    tal:condition-else="php:10==${field/type}" type="number"   tal:attributes="name 'identity[${field/name}]'; value field/value; required attr/required; placeholder attr/placeholder; max attr/max; min attr/min; step attr/step"/>
+					<input    tal:condition-else="php:12==${field/type}" type="range"    tal:attributes="name 'identity[${field/name}]'; value field/value; required attr/required; placeholder attr/placeholder; max attr/max; min attr/min; step attr/step"/>
+					<input    tal:condition-else="php:13==${field/type}" type="tel"      tal:attributes="name 'identity[${field/name}]'; value field/value; required attr/required; placeholder attr/placeholder"/>
+					<input    tal:condition-else="php:14==${field/type}" type="time"     tal:attributes="name 'identity[${field/name}]'; value field/value; required attr/required; placeholder attr/placeholder"/>
+					<input    tal:condition-else="php:15==${field/type}" type="url"      tal:attributes="name 'identity[${field/name}]'; value field/value; required attr/required; placeholder attr/placeholder"/>
+					<input    tal:condition-else="php:16==${field/type}" type="week"     tal:attributes="name 'identity[${field/name}]'; value field/value; required attr/required; placeholder attr/placeholder"/>
+					<textarea tal:condition-else="php:17==${field/type}" tal:attributes="name 'identity[${field/name}]'; required attr/required; placeholder attr/placeholder" tal:content="field/value"></textarea>
+					<textarea tal:condition-else="php:18==${field/type}" tal:attributes="name 'identity[${field/name}]'; required attr/required; placeholder attr/placeholder" tal:content="field/value" class="wysiwyg"></textarea>
+					<select   tal:condition-else="php:19==${field/type}" tal:attributes="name 'identity[${field/name}]'; required attr/required">
+						<option tal:repeat="option attr/options" tal:attributes="value option/value; selected php:${option/value}==${field/value}" tal:content="option/label"></option>
+					</select>
+					<select   tal:condition-else="php:21==${field/type}" tal:attributes="name 'identity[${field/name}]'; required attr/required">
+						<option></option>
+						<option tal:repeat="option L10N/getCountries" tal:attributes="value option/value; selected php:${option/value}==${field/value}" tal:content="option/label"></option>
+					</select>
+<!--
+					FIELD_TYPE_DATETIME_LOCAL = 6,
+					FIELD_TYPE_FILE     = 8,
+					FIELD_TYPE_RADIO    = 11,
+					FIELD_TYPE_TIMEZONE = 20,
+					FIELD_TYPE_COMBOBOX = 22, // <input list="*"/><datalist id="*"><option value=""/></datalist>
+					FIELD_TYPE_CUSTOM   = 23;
+-->
+				</label>
+			</div>
+		</fieldset>
+
+	</div>
+
+	<div id="identity-groups" class="section-panel identity-groups">
+		<fieldset tal:repeat="group identity_groups">
+			<legend>
+				<label>
+					<input type="radio" name="identity_groups[]" tal:attributes="value group/id; checked group/member"/>
+					<span tal:content="group/name"></span>
+				</label>
+			</legend>
+			<label tal:repeat="group group/children">
+				<input type="checkbox" name="identity_groups[]" tal:attributes="value group/id; checked group/member"/>
+				<span tal:content="group/name"></span>
+			</label>
+		</fieldset>
+		<div class="clear"></div>
+	</div>
+
+	<div id="identity-auth" class="section-panel">
+		<fieldset tal:repeat="auth identity_auths">
+			<legend tal:content="auth/name">Database</legend>
+			<div tal:condition="php:1==${auth/id}">
+				<label>
+					<span i18n:translate="">Username</span>
+					<input type="text" name="auth_db_claimed_id"/>
+				</label>
+				<label>
+					<span i18n:translate="">Passphrase</span>
+					<input style="display:none;"/><!-- HACK: disable autocomplete -->
+					<input type="password" name="auth_db_pass" placeholder="●●●●●" tal:attributes="pattern '.{${CONFIG/identity/passwd_minlength},}'" class="meter"/>
+				</label>
+			</div>
+			<div tal:condition="auth/claimed_ids">
+				<div tal:omit-tag="" tal:repeat="item auth/claimed_ids">
+					<label tal:repeat="item auth/claimed_ids" i18n:attributes="title 'Delete'">
+						<input type="checkbox" tal:attributes="name 'auth_delete[${auth/id}][]'; value item/id"/>
+						<span tal:replace="item/id"></span>
+					</label>
+					<em tal:condition="item/info" tal:content="item/info"></em>
+					<a style="text-decoration:none;color:#000" tal:condition="item/qr" tal:attributes="href item/qr/src; download 'login-qrcode-${identity/nickname}-${auth/name}.png'">
+						<em tal:condition="item/qr" tal:content="item/qr/obj"></em>
+					</a>
+				</div>
+			</div>
+			<div tal:condition="not:auth/claimed_ids">
+				<a tal:condition="auth/can_create" tal:attributes="href '?auth_create=${auth/id}'">Activate</a>
+				<div tal:condition-else="" i18n:translate="">No authentication tokens available</div>
+			</div>
+		</fieldset>
+	</div>
+
+	<div id="main-content-foot">
+		<button i18n:translate="">Save</button>
+	</div>
+	</form>
+</div>
+
+</div>

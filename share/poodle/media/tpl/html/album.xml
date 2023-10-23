@@ -1,0 +1,28 @@
+
+<h1 tal:content="album/title"></h1>
+<div tal:content="structure album/body"></div>
+
+<ul tal:condition="media_albums" tal:omit-tag="" tal:include="poodle/media/albums"></ul>
+
+<div id="media-album-items">
+	<figure itemprop="associatedMedia" itemscope="" itemtype="http://schema.org/ImageObject" tal:repeat="item album_items">
+		<a tal:define="media item/media; dimension item/media/getDimension" tal:attributes="id 'media-item-{item/media/id}-caption'; href '${URI_MEDIA}/${media/file}'; data-width dimension/width; data-height dimension/height" itemprop="contentUrl">
+			<picture>
+				<source tal:attributes="srcset '${URI_MEDIA}/albums/resized/${media/file_hash}/webp/thumbnail.png.webp'" type="image/webp"/>
+				<img tal:attributes="src '${URI_MEDIA}/albums/resized/${media/file_hash}/thumbnail.png'; title media/getTitle | media/getFilename; aria-labelledby 'media-item-{item/media/id}-caption'" alt="" itemprop="thumbnail"/>
+<!--
+				<img tal:attributes="src '${URI_MEDIA}/albums/resized/${media/file_hash}/thumbnail.png'; title media/getTitle | media/getFilename; aria-labelledby 'media-item-{item/media/id}-caption'; aria-describedby 'media-item-{item/media/id}-description'" alt="" itemprop="thumbnail"/>
+-->
+			</picture>
+		</a>
+		<figcaption itemprop="caption description" tal:content="media/getTitle | media/getFilename">Image caption</figcaption>
+	</figure>
+</div>
+
+<!--
+<div hidden="">
+	<div tal:repeat="item album_items" itemprop="description" tal:attributes="id 'media-item-{item/media/id}-description'" tal:content="media/getDescription"></div>
+</div>
+-->
+
+<div tal:omit-tag="" tal:include="poodle/media/photoswipe"></div>

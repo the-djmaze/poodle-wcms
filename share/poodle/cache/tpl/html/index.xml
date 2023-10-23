@@ -1,0 +1,14 @@
+
+<div id="main-content">
+	<div id="main-content-head">
+		<a class="button" href="?clear" i18n:translate="">clear</a>
+	</div>
+	<div id="admin-cache">
+		<ul>
+			<li tal:repeat="name KERNEL/CACHE/listAll" tal:content="name">name</li>
+		</ul>
+	</div>
+	<div id="main-content-foot">
+		<a class="button" href="?clear" i18n:translate="">clear</a>
+	</div>
+</div>

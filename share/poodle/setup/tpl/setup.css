@@ -1,0 +1,172 @@
+html, body { height:100%; padding:0; }
+body, select {
+	background-color: #fff;
+	font-family: Verdana, Geneva, "DejaVu Sans", "Bitstream Vera Sans", "DejaVu LGC Sans", sans-serif;
+}
+
+h1 {
+	font-size:20px;
+}
+
+i { font-style: normal; }
+
+#header, #content {
+	margin:0 auto;
+	position:relative;
+	width:780px;
+}
+#header {
+	font-size:11px;
+}
+#header h1 {
+	background:url(../images/setup/poodle-logo.png) no-repeat scroll 0 center;
+	line-height:40px;
+	margin:0;
+	padding-left:48px;
+}
+
+#menu {
+	background-color: #666;
+	background-image: linear-gradient(#999, #333);
+	border:1px solid #000;
+	border-top-color:#666;
+	border-left-color:#666;
+	border-radius:10px;
+	padding-left:6px;
+}
+#menu ol {
+	height:23px;
+	list-style:decimal inside;
+	margin:0;
+	padding:0;
+}
+#menu ol li {
+	background-position: -6px 0;
+	color:#DDD;
+	float:left;
+	font-size:10px;
+	height:23px;
+	line-height:23px;
+	padding-left:5px;
+	position:relative;
+	width:148px;
+}
+#menu ol li.current { color: #fff; font-weight: bold; text-shadow: 1px 1px 1px #000; }
+#menu ol li.current::after { content:'*'; position:absolute; top:-2px; }
+#menu ol li.done    { color: #0e0; font-weight: bold; }
+#menu ol li.done::after { content:'✓'; font-size:16px; position:absolute; top:-5px; }
+
+#content {
+	border: 1px solid #D3D3D3;
+	-moz-border-radius:6px;
+	bottom:24px;
+	font-size:14px;
+	left:0;
+	overflow:auto;
+	padding:12px;
+	position:absolute;
+	right:0;
+	top:68px;
+	width:754px;
+}
+
+#content ul {
+	margin:0.5em;
+}
+#content li {
+	margin-bottom:1em;
+}
+#content .error li {
+	margin:0;
+}
+
+#stepbuttons {
+	margin-top:10px;
+	float:right;
+}
+
+
+iframe, table { width:100%; }
+
+fieldset { padding:8px 0 0 0; margin:0 0 8px 0; border:1px solid #D3D3D3}
+.tabs fieldset { padding:0; margin:0; border:0}
+legend { margin-left:16px; padding:0; }
+.tabs > * > legend:first-child { font-size:12px; margin:0; padding:0 6px;}
+td.v { width:155px; }
+td.status, td.value {
+	font-weight:bolder;
+	text-align:center;
+	width:40px;
+}
+.ok .status, .ok .value     { color:#0A0; }
+.fail .status, .fail .value { color:#D00; }
+.ok .status, .fail .status {
+	background-repeat: no-repeat;
+	background-position: center center;
+	text-indent:-700em;
+}
+.ok .status   { background-image: url(../images/16x16/yes.png); }
+.fail .status { background-image: url(../images/16x16/no.png); }
+tbody tr:nth-child(even) { background-color:#FFF; }
+tbody tr:nth-child(odd)  { background-color:#EEE; }
+td {
+	border-left:1px solid #D3D3D3;
+	border-bottom:1px solid #D3D3D3;
+	padding:2px 3px 3px 4px;
+}
+tr:first-child td {
+	border-top:1px solid #D3D3D3;
+}
+td:first-child {
+	border-left:0;
+}
+.tabs td {
+	border-right:1px solid #D3D3D3;
+	border-left:0;
+}
+.tabs td:first-child {
+	border-left:1px solid #D3D3D3;
+}
+/*
+#stepcontent { width:560px; }
+#stepbuttons { position:fixed;bottom:2px;right:2px;z-index:100;width:12em }
+#stepslist {
+	position: fixed;
+	top:0;
+	right:0;
+	width:12em;
+	bottom:0;
+	background-color: #5A2;
+	color:#FFF;
+	padding: 0 0 0 3px;
+}
+#stepslist div {
+	border: 1px solid #5A2;
+	margin: 4px 2px 4px 0;
+	padding-left:22px;
+	background:transparent url(boxes.gif) no-repeat scroll 2px 0;
+}
+#stepslist div.done    { background-position:2px -128px; }
+#stepslist div.current { background-position:2px -64px; border-style: inset; }
+*/
+#download { text-align:center }
+#download a { padding:4px 50px 4px;border:1px solid #F00; }
+
+input, select { width:150px }
+
+#account input { width:250px }
+#account select { width:252px }
+
+.error {color:#F00;padding:4px 8px;}
+.error legend {margin-left:8px;}
+p.error { text-align:center; color:#D00; }
+
+td.info { display:table-cell; vertical-align:middle; text-align:center; width:40px; background-image:none; }
+td.info span {
+	text-align:left;
+}
+td.info span {
+	background-position: 397px 1px;
+	left: -398px;
+	width: 390px;
+}
